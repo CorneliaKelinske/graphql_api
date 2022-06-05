@@ -11,7 +11,6 @@ defmodule GraphqlApi.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-
       preferred_cli_env: [
         dialyzer: :dev,
         coveralls: :dev,
@@ -56,11 +55,10 @@ defmodule GraphqlApi.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
 
-      #tooling
+      # tooling
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},
       {:ex_check, "~> 0.14.0", only: :dev, runtime: false},
       {:credo, "~> 1.5", only: :dev, runtime: false}
-
     ]
   end
 
