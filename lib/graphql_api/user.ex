@@ -65,6 +65,28 @@ defmodule GraphqlApi.User do
     end
   end
 
+  def create_user(params) do
+    {:ok, params}
+  end
+
+  def update_user(id, params) do
+    with {:ok, user} <- find(%{id: id}) do
+      {:ok, Map.merge(user, params)}
+    end
+  end
+
+  def update_user_preferences(id, params) do
+    with {:ok, user} <- find(%{id: id}) do
+      user =
+        user
+        |> Map.get(:preferences)
+        |> Map.merge(params)
+        |> then(&Map.put(user, :preferences, &1))
+
+      {:ok, user}
+    end
+  end
+
   defp preference_keys(preferences) do
     Map.keys(preferences)
   end

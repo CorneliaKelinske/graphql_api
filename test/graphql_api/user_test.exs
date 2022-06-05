@@ -45,4 +45,36 @@ defmodule GraphqlApi.User.Test do
       assert {:error, %{message: "not found", details: %{id: 9}}} === User.find(%{id: 9})
     end
   end
+
+  describe "create/1" do
+    test "returns a new user" do
+      assert {:ok,
+              %{
+                id: 5,
+                name: "harry",
+                email: "dresden@example.com",
+                preferences: %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
+              }} ===
+               User.create_user(%{
+                 id: 5,
+                 name: "harry",
+                 email: "dresden@example.com",
+                 preferences: %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
+               })
+    end
+  end
+
+  describe "update_user/2" do
+    test "returns an updated user" do
+      {:ok, user} = User.update_user(4, %{name: "Tom"})
+      assert user.name === "Tom"
+    end
+  end
+
+  describe "update_user_preferences/2" do
+    test "returns a user with updated preferences" do
+      {:ok, user} = User.update_user_preferences(1, %{likes_emails: true})
+      assert user.preferences === %{likes_emails: true, likes_phone_calls: true, likes_faxes: true}
+    end
+  end
 end
