@@ -42,11 +42,7 @@ defmodule GraphqlApi.User do
     }
   ]
 
-  def all() do
-    {:ok, @users}
-  end
-
-  def all(preferences) do
+    def all(preferences) do
     preference_keys = preference_keys(preferences)
 
     case Enum.filter(

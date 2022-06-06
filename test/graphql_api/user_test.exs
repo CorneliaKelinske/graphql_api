@@ -3,15 +3,12 @@ defmodule GraphqlApi.User.Test do
 
   alias GraphqlApi.User
 
-  describe "all/0" do
-    test "returns a list of all users" do
-      users = User.all()
-      {:ok, users} = User.all()
+  describe "all/1" do
+    test "returns a list of all users when no preferences are passed in" do
+      {:ok, users} = User.all(%{})
       assert length(users) === 4
     end
-  end
 
-  describe "all/1" do
     test "returns a list of users with matching preferences when all three preferences are provided" do
       {:ok, users} =
         User.all(%{likes_emails: false, likes_phone_calls: false, likes_faxes: false})
@@ -74,7 +71,12 @@ defmodule GraphqlApi.User.Test do
   describe "update_user_preferences/2" do
     test "returns a user with updated preferences" do
       {:ok, user} = User.update_user_preferences(1, %{likes_emails: true})
-      assert user.preferences === %{likes_emails: true, likes_phone_calls: true, likes_faxes: true}
+
+      assert user.preferences === %{
+               likes_emails: true,
+               likes_phone_calls: true,
+               likes_faxes: true
+             }
     end
   end
 end
