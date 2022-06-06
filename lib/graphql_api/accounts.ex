@@ -75,6 +75,10 @@ defmodule GraphqlApi.Accounts do
     end
   end
 
+  def update_user_preferences(_id, params) when params === %{} do
+    {:error, %{message: "no update params given", details: %{params: params}}}
+  end
+
   def update_user_preferences(id, params) do
     with {:ok, user} <- find_user(%{id: id}) do
       preferences =

@@ -3,6 +3,6 @@ defmodule GraphqlApiWeb.Resolvers.Preference do
 
   def update_user_preferences(%{user_id: id} = params, _) do
     id = String.to_integer(id)
-    Accounts.update_user_preferences(id, Map.delete(params, :id))
+    Accounts.update_user_preferences(id, Map.delete(params, :user_id))
   end
 end
