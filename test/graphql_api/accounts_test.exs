@@ -10,12 +10,18 @@ defmodule GraphqlApi.Accounts.Test do
     end
 
     test "returns a list of users with matching preferences when all three preferences are provided" do
-      {:ok, users} =
+      {:ok,
+       [
+         %{
+           email: "tim@gmail.com",
+           id: 4,
+           name: "Tim",
+           preferences: %{likes_emails: false, likes_faxes: false, likes_phone_calls: false}
+         }
+       ]} =
         Accounts.all_users(%{
           preferences: %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
         })
-
-      assert length(users) === 1
     end
 
     test "returns a list of users with matching preferences when not all preferences are provided" do
@@ -71,6 +77,10 @@ defmodule GraphqlApi.Accounts.Test do
       {:ok, user} = Accounts.update_user(4, %{name: "Tom"})
       assert user.name === "Tom"
     end
+
+    test "returns tuple with :error and map with error info when no update params are provided" do
+      assert {:error, %{message: "no update params given", details: %{params: %{}}}} === Accounts.update_user(4, %{})
+    end
   end
 
   describe "update_user_preferences/2" do
@@ -82,6 +92,10 @@ defmodule GraphqlApi.Accounts.Test do
                likes_phone_calls: true,
                likes_faxes: true
              }
+    end
+
+    test "returns tuple with :error and map with error info when no update params are provided" do
+      assert {:error, %{message: "no update params given", details: %{params: %{}}}} === Accounts.update_user_preferences(4, %{})
     end
   end
 end

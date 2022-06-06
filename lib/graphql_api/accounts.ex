@@ -1,4 +1,6 @@
 defmodule GraphqlApi.Accounts do
+  defguard empty_map?(map) when map_size(map) === 0
+
   @users [
     %{
       id: 1,
@@ -69,13 +71,17 @@ defmodule GraphqlApi.Accounts do
     {:ok, params}
   end
 
+  def update_user(_id, params) when empty_map?(params) do
+    {:error, %{message: "no update params given", details: %{params: params}}}
+  end
+
   def update_user(id, params) do
     with {:ok, user} <- find_user(%{id: id}) do
       {:ok, Map.merge(user, params)}
     end
   end
 
-  def update_user_preferences(_id, params) when params === %{} do
+  def update_user_preferences(_id, params) when empty_map?(params) do
     {:error, %{message: "no update params given", details: %{params: params}}}
   end
 

@@ -15,7 +15,8 @@ defmodule GraphqlApiWeb.Resolvers.User do
   end
 
   def update_user(%{id: id} = params, _) do
-    id = String.to_integer(id)
-    Accounts.update_user(id, Map.delete(params, :id))
+    id
+    |> String.to_integer()
+    |> Accounts.update_user(Map.delete(params, :id))
   end
 end
