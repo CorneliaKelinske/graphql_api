@@ -1,4 +1,6 @@
-defmodule GraphqlApi.User do
+defmodule GraphqlApi.Accounts do
+  defguard empty_map?(map) when map_size(map) === 0
+
   @users [
     %{
       id: 1,
@@ -42,7 +44,7 @@ defmodule GraphqlApi.User do
     }
   ]
 
-    def all(preferences) do
+  def all_users(%{preferences: %{} = preferences}) do
     preference_keys = preference_keys(preferences)
 
     case Enum.filter(
@@ -54,7 +56,11 @@ defmodule GraphqlApi.User do
     end
   end
 
-  def find(%{id: id}) do
+  def all_users(_) do
+    {:ok, @users}
+  end
+
+  def find_user(%{id: id}) do
     case Enum.find(@users, &(&1.id === id)) do
       nil -> {:error, %{message: "not found", details: %{id: id}}}
       user -> {:ok, user}
@@ -65,21 +71,28 @@ defmodule GraphqlApi.User do
     {:ok, params}
   end
 
+  def update_user(_id, params) when empty_map?(params) do
+    {:error, %{message: "no update params given", details: %{params: params}}}
+  end
+
   def update_user(id, params) do
-    with {:ok, user} <- find(%{id: id}) do
+    with {:ok, user} <- find_user(%{id: id}) do
       {:ok, Map.merge(user, params)}
     end
   end
 
+  def update_user_preferences(_id, params) when empty_map?(params) do
+    {:error, %{message: "no update params given", details: %{params: params}}}
+  end
+
   def update_user_preferences(id, params) do
-    with {:ok, user} <- find(%{id: id}) do
-      user =
+    with {:ok, user} <- find_user(%{id: id}) do
+      preferences =
         user
         |> Map.get(:preferences)
         |> Map.merge(params)
-        |> then(&Map.put(user, :preferences, &1))
 
-      {:ok, user}
+      {:ok, preferences}
     end
   end
 
