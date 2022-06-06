@@ -14,7 +14,8 @@ defmodule GraphqlApiWeb.Router do
       forward "/graphiql", Absinthe.Plug.GraphiQL,
         schema: GraphqlApiWeb.Schema,
         interface: :playground
-    #     #context: %{pubsub: CommunityWeb.Endpoint}
+
+      #     #context: %{pubsub: CommunityWeb.Endpoint}
     end
   end
 

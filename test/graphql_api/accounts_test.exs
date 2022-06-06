@@ -1,23 +1,25 @@
-defmodule GraphqlApi.User.Test do
+defmodule GraphqlApi.Accounts.Test do
   use GraphqlApi.DataCase, async: true
 
-  alias GraphqlApi.User
+  alias GraphqlApi.Accounts
 
   describe "all/1" do
     test "returns a list of all users when no preferences are passed in" do
-      {:ok, users} = User.all(%{})
+      {:ok, users} = Accounts.all_users(%{})
       assert length(users) === 4
     end
 
     test "returns a list of users with matching preferences when all three preferences are provided" do
       {:ok, users} =
-        User.all(%{likes_emails: false, likes_phone_calls: false, likes_faxes: false})
+        Accounts.all_users(%{
+          preferences: %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
+        })
 
       assert length(users) === 1
     end
 
     test "returns a list of users with matching preferences when not all preferences are provided" do
-      {:ok, users} = User.all(%{likes_emails: true})
+      {:ok, users} = Accounts.all_users(%{preferences: %{likes_emails: true}})
       assert length(users) === 2
     end
 
@@ -28,18 +30,21 @@ defmodule GraphqlApi.User.Test do
                 details: %{
                   preferences: %{likes_emails: true, likes_phone_calls: true, likes_faxes: true}
                 }
-              }} === User.all(%{likes_emails: true, likes_phone_calls: true, likes_faxes: true})
+              }} ===
+               Accounts.all_users(%{
+                 preferences: %{likes_emails: true, likes_phone_calls: true, likes_faxes: true}
+               })
     end
   end
 
   describe "find/1" do
     test "returns the user with the matching id" do
-      {:ok, user} = User.find(%{id: 1})
+      {:ok, user} = Accounts.find_user(%{id: 1})
       assert user.name === "Bill"
     end
 
     test "returns tuple with :error and map with error info when no user is found for the given id" do
-      assert {:error, %{message: "not found", details: %{id: 9}}} === User.find(%{id: 9})
+      assert {:error, %{message: "not found", details: %{id: 9}}} === Accounts.find_user(%{id: 9})
     end
   end
 
@@ -52,7 +57,7 @@ defmodule GraphqlApi.User.Test do
                 email: "dresden@example.com",
                 preferences: %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
               }} ===
-               User.create_user(%{
+               Accounts.create_user(%{
                  id: 5,
                  name: "harry",
                  email: "dresden@example.com",
@@ -63,16 +68,16 @@ defmodule GraphqlApi.User.Test do
 
   describe "update_user/2" do
     test "returns an updated user" do
-      {:ok, user} = User.update_user(4, %{name: "Tom"})
+      {:ok, user} = Accounts.update_user(4, %{name: "Tom"})
       assert user.name === "Tom"
     end
   end
 
   describe "update_user_preferences/2" do
-    test "returns a user with updated preferences" do
-      {:ok, user} = User.update_user_preferences(1, %{likes_emails: true})
+    test "returns updated preferences" do
+      {:ok, preferences} = Accounts.update_user_preferences(1, %{likes_emails: true})
 
-      assert user.preferences === %{
+      assert preferences === %{
                likes_emails: true,
                likes_phone_calls: true,
                likes_faxes: true
