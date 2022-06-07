@@ -3,8 +3,8 @@ defmodule GraphqlApiWeb.Schema.Subscriptions.Preference do
   use Absinthe.Schema.Notation
 
   object :preference_subscriptions do
-    
-    field :updated_user_preferences, :preference do
+    @desc "Broadcasts user preferences when updated"
+    field :updated_user_preferences, :preferences do
       arg :user_id, non_null(:id)
 
       config fn args, _ -> {:ok, topic: key(args)} end
