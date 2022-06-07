@@ -13,6 +13,7 @@ defmodule GraphqlApiWeb.Router do
     if Mix.env() === :dev do
       forward "/graphiql", Absinthe.Plug.GraphiQL,
         schema: GraphqlApiWeb.Schema,
+        socket: GraphqlApiWeb.UserSocket,
         interface: :playground
 
       #     #context: %{pubsub: CommunityWeb.Endpoint}

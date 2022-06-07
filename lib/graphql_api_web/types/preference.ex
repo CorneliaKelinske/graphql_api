@@ -3,6 +3,7 @@ defmodule GraphqlApiWeb.Types.Preference do
 
   @desc "Notification preferences for a users - queries"
   object :preference do
+    field :user_id, non_null(:id)
     field :likes_emails, non_null(:boolean)
     field :likes_phone_calls, non_null(:boolean)
     field :likes_faxes, non_null(:boolean)

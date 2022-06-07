@@ -92,6 +92,7 @@ defmodule GraphqlApi.Accounts do
         |> Map.get(:preferences)
         |> Map.merge(params)
 
+      IO.inspect(preferences, label: "preferences")
       {:ok, preferences}
     end
   end
