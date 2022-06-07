@@ -1,8 +1,9 @@
 defmodule GraphqlApiWeb.Types.Preference do
+  @moduledoc false
   use Absinthe.Schema.Notation
 
   @desc "Notification preferences for a users - queries"
-  object :preference do
+  object :preferences do
     field :user_id, non_null(:id)
     field :likes_emails, non_null(:boolean)
     field :likes_phone_calls, non_null(:boolean)

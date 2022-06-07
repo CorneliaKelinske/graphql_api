@@ -1,4 +1,5 @@
 defmodule GraphqlApiWeb.Types.User do
+  @moduledoc false
   use Absinthe.Schema.Notation
 
   @desc "A user with notification preferences"
@@ -7,6 +8,6 @@ defmodule GraphqlApiWeb.Types.User do
     field :name, non_null(:string)
     field :email, non_null(:string)
 
-    field :preferences, non_null(:preference)
+    field :preferences, non_null(:preferences)
   end
 end
