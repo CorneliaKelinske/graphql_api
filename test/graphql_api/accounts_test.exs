@@ -79,7 +79,8 @@ defmodule GraphqlApi.Accounts.Test do
     end
 
     test "returns tuple with :error and map with error info when no update params are provided" do
-      assert {:error, %{message: "no update params given", details: %{params: %{}}}} === Accounts.update_user(4, %{})
+      assert {:error, %{message: "no update params given", details: %{params: %{}}}} ===
+               Accounts.update_user(4, %{})
     end
   end
 
@@ -95,7 +96,8 @@ defmodule GraphqlApi.Accounts.Test do
     end
 
     test "returns tuple with :error and map with error info when no update params are provided" do
-      assert {:error, %{message: "no update params given", details: %{params: %{}}}} === Accounts.update_user_preferences(4, %{})
+      assert {:error, %{message: "no update params given", details: %{params: %{}}}} ===
+               Accounts.update_user_preferences(4, %{})
     end
   end
 end

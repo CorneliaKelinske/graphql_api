@@ -17,7 +17,6 @@ defmodule GraphqlApi.Application do
       # Start the Endpoint (http/https)
       GraphqlApiWeb.Endpoint,
       {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]}
-
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

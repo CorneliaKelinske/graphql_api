@@ -9,12 +9,10 @@ defmodule GraphqlApiWeb.Schema.Subscriptions.Preference do
         {:ok, topic: args.user_id}
       end
 
-      trigger :update_user_preferences, topic: fn preference ->
-        preference.user_id
-      end
-
-
+      trigger :update_user_preferences,
+        topic: fn preference ->
+          preference.user_id
+        end
     end
   end
-
 end

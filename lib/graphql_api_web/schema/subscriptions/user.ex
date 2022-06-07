@@ -7,11 +7,10 @@ defmodule GraphqlApiWeb.Schema.Subscriptions.User do
         {:ok, topic: "new user"}
       end
 
-      trigger :create_user, topic: fn _ ->
-        "new user"
-      end
-
-      
+      trigger :create_user,
+        topic: fn _ ->
+          "new user"
+        end
     end
   end
 end
