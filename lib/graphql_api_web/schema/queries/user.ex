@@ -1,4 +1,6 @@
 defmodule GraphqlApiWeb.Schema.Queries.User do
+  @moduledoc false
+
   use Absinthe.Schema.Notation
   alias GraphqlApiWeb.Resolvers
 

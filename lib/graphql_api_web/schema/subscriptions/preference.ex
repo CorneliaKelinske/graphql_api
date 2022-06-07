@@ -1,7 +1,9 @@
 defmodule GraphqlApiWeb.Schema.Subscriptions.Preference do
+  @moduledoc false
   use Absinthe.Schema.Notation
 
   object :preference_subscriptions do
+    
     field :updated_user_preferences, :preference do
       arg :user_id, non_null(:id)
 

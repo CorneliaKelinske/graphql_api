@@ -1,4 +1,5 @@
 defmodule GraphqlApiWeb.Schema do
+  @moduledoc false
   use Absinthe.Schema
 
   import_types GraphqlApiWeb.Types.Preference

@@ -1,4 +1,5 @@
 defmodule GraphqlApiWeb.Schema.Subscriptions.User do
+  @moduledoc false
   use Absinthe.Schema.Notation
 
   object :user_subscriptions do

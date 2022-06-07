@@ -1,4 +1,5 @@
 defmodule GraphqlApiWeb.Types.User do
+  @moduledoc false
   use Absinthe.Schema.Notation
 
   @desc "A user with notification preferences"

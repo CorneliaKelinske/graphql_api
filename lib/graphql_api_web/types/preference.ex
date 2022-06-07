@@ -1,4 +1,5 @@
 defmodule GraphqlApiWeb.Types.Preference do
+  @moduledoc false
   use Absinthe.Schema.Notation
 
   @desc "Notification preferences for a users - queries"

@@ -6,7 +6,8 @@ defmodule GraphqlApiWeb.Resolvers.Preference do
   @type preferences :: GraphqlApi.Accounts.preferences()
   @type error :: GraphqlApi.Accounts.error()
 
-  @spec update_user_preferences(%{user_id: String.t()}, resolution()) :: {:error, error} | {:ok, preferences()}
+  @spec update_user_preferences(%{user_id: String.t()}, resolution()) ::
+          {:ok, preferences()} | {:error, error}
   def update_user_preferences(%{user_id: id} = params, _) do
     id = String.to_integer(id)
 

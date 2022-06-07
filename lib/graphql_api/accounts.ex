@@ -11,22 +11,11 @@ defmodule GraphqlApi.Accounts do
           email: String.t(),
           preferences: preferences()
         }
-  @type user_params :: %{
-          optional(:id) => pos_integer(),
-          optional(:name) => String.t(),
-          optional(:email) => String.t(),
-          optional(:preferences) => preferences()
-        }
+
   @type preferences :: %{
           likes_emails: boolean(),
           likes_phone_calls: boolean,
           likes_faxes: boolean
-        }
-  @type preferences_params :: %{
-          optional(:user_id) => String.t(),
-          optional(:likes_emails) => boolean(),
-          optional(:likes_phone_calls) => boolean,
-          optional(:likes_faxes) => boolean
         }
   @type error :: %{message: String.t(), details: map}
 
@@ -103,7 +92,7 @@ defmodule GraphqlApi.Accounts do
     {:ok, params}
   end
 
-@spec update_user(pos_integer, user_params()) :: {:ok, user} |{:error, error}
+  @spec update_user(pos_integer, map) :: {:ok, user} | {:error, error}
   def update_user(_id, params) when empty_map?(params) do
     {:error, %{message: "no update params given", details: %{params: params}}}
   end
@@ -114,8 +103,8 @@ defmodule GraphqlApi.Accounts do
     end
   end
 
-  @spec update_user_preferences(integer(), preferences_params()) ::
-          {:error, error} | {:ok, preferences()}
+  @spec update_user_preferences(integer(), map) ::
+          {:ok, preferences()} | {:error, error}
   def update_user_preferences(_id, params) when empty_map?(params) do
     {:error, %{message: "no update params given", details: %{params: params}}}
   end
