@@ -20,6 +20,7 @@ defmodule GraphqlApi.MixProject do
       dialyzer: [
         plt_add_apps: [:ex_unit, :mix],
         list_unused_filters: true,
+        ignore_warnings: ".dialyzer-ignore.exs",
         flags: [:unmatched_returns, :no_improper_lists]
       ]
     ]

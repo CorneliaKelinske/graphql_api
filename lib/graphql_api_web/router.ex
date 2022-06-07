@@ -15,8 +15,6 @@ defmodule GraphqlApiWeb.Router do
         schema: GraphqlApiWeb.Schema,
         socket: GraphqlApiWeb.UserSocket,
         interface: :playground
-
-      #     #context: %{pubsub: CommunityWeb.Endpoint}
     end
   end
 

@@ -1,5 +1,34 @@
 defmodule GraphqlApi.Accounts do
+  @moduledoc """
+  Defines a list of users and the functions for interacting with those users
+  """
+
   defguard empty_map?(map) when map_size(map) === 0
+
+  @type user :: %{
+          id: pos_integer(),
+          name: String.t(),
+          email: String.t(),
+          preferences: preferences()
+        }
+  @type user_params :: %{
+          optional(:id) => pos_integer(),
+          optional(:name) => String.t(),
+          optional(:email) => String.t(),
+          optional(:preferences) => preferences()
+        }
+  @type preferences :: %{
+          likes_emails: boolean(),
+          likes_phone_calls: boolean,
+          likes_faxes: boolean
+        }
+  @type preferences_params :: %{
+          optional(:user_id) => String.t(),
+          optional(:likes_emails) => boolean(),
+          optional(:likes_phone_calls) => boolean,
+          optional(:likes_faxes) => boolean
+        }
+  @type error :: %{message: String.t(), details: map}
 
   @users [
     %{
@@ -44,6 +73,7 @@ defmodule GraphqlApi.Accounts do
     }
   ]
 
+  @spec all_users(map()) :: {:ok, [user()]} | {:error, error()}
   def all_users(%{preferences: %{} = preferences}) do
     preference_keys = preference_keys(preferences)
 
@@ -60,6 +90,7 @@ defmodule GraphqlApi.Accounts do
     {:ok, @users}
   end
 
+  @spec find_user(%{id: pos_integer}) :: {:ok, user} | {:error, error()}
   def find_user(%{id: id}) do
     case Enum.find(@users, &(&1.id === id)) do
       nil -> {:error, %{message: "not found", details: %{id: id}}}
@@ -67,10 +98,12 @@ defmodule GraphqlApi.Accounts do
     end
   end
 
+  @spec create_user(user()) :: {:ok, user}
   def create_user(params) do
     {:ok, params}
   end
 
+@spec update_user(pos_integer, user_params()) :: {:ok, user} |{:error, error}
   def update_user(_id, params) when empty_map?(params) do
     {:error, %{message: "no update params given", details: %{params: params}}}
   end
@@ -81,6 +114,8 @@ defmodule GraphqlApi.Accounts do
     end
   end
 
+  @spec update_user_preferences(integer(), preferences_params()) ::
+          {:error, error} | {:ok, preferences()}
   def update_user_preferences(_id, params) when empty_map?(params) do
     {:error, %{message: "no update params given", details: %{params: params}}}
   end
@@ -92,7 +127,6 @@ defmodule GraphqlApi.Accounts do
         |> Map.get(:preferences)
         |> Map.merge(params)
 
-      IO.inspect(preferences, label: "preferences")
       {:ok, preferences}
     end
   end
