@@ -10,22 +10,28 @@ defmodule GraphqlApi.Accounts.Test do
     end
 
     test "returns a list of users with matching preferences when all three preferences are provided" do
-      {:ok,
-       [
-         %{
-           email: "tim@gmail.com",
-           id: 4,
-           name: "Tim",
-           preferences: %{likes_emails: false, likes_faxes: false, likes_phone_calls: false}
-         }
-       ]} =
-        Accounts.all_users(%{
-          preferences: %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
-        })
+      assert {:ok,
+              [
+                %{
+                  email: "tim@gmail.com",
+                  id: 4,
+                  name: "Tim",
+                  preferences: %{
+                    likes_emails: false,
+                    likes_faxes: false,
+                    likes_phone_calls: false
+                  }
+                }
+              ]} ===
+               Accounts.all_users(%{
+                 likes_emails: false,
+                 likes_phone_calls: false,
+                 likes_faxes: false
+               })
     end
 
     test "returns a list of users with matching preferences when not all preferences are provided" do
-      {:ok, users} = Accounts.all_users(%{preferences: %{likes_emails: true}})
+      {:ok, users} = Accounts.all_users(%{likes_emails: true})
       assert length(users) === 2
     end
 
@@ -34,7 +40,9 @@ defmodule GraphqlApi.Accounts.Test do
               %{
                 message: "not found",
                 details: %{
-                  preferences: %{likes_emails: true, likes_phone_calls: true, likes_faxes: true}
+                  preferences: %{
+                    preferences: %{likes_emails: true, likes_phone_calls: true, likes_faxes: true}
+                  }
                 }
               }} ===
                Accounts.all_users(%{

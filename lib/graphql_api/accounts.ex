@@ -63,7 +63,11 @@ defmodule GraphqlApi.Accounts do
   ]
 
   @spec all_users(map()) :: {:ok, [user()]} | {:error, error()}
-  def all_users(%{preferences: %{} = preferences}) do
+  def all_users(params) when empty_map?(params) do
+    {:ok, @users}
+  end
+
+  def all_users(preferences) do
     preference_keys = preference_keys(preferences)
 
     case Enum.filter(
@@ -73,10 +77,6 @@ defmodule GraphqlApi.Accounts do
       [] -> {:error, %{message: "not found", details: %{preferences: preferences}}}
       users -> {:ok, users}
     end
-  end
-
-  def all_users(_) do
-    {:ok, @users}
   end
 
   @spec find_user(%{id: pos_integer}) :: {:ok, user} | {:error, error()}
