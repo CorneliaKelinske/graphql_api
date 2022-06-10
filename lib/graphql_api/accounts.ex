@@ -68,11 +68,11 @@ defmodule GraphqlApi.Accounts do
   end
 
   def all_users(preferences) do
-    preference_keys = preference_keys(preferences)
+    preference_keys = Map.keys(preferences)
 
     case Enum.filter(
            @users,
-           &(relevant_preferences(&1.preferences, preference_keys) === preferences)
+           &(Map.take(&1.preferences, preference_keys) === preferences)
          ) do
       [] -> {:error, %{message: "not found", details: %{preferences: preferences}}}
       users -> {:ok, users}
@@ -118,13 +118,5 @@ defmodule GraphqlApi.Accounts do
 
       {:ok, preferences}
     end
-  end
-
-  defp preference_keys(preferences) do
-    Map.keys(preferences)
-  end
-
-  defp relevant_preferences(user_preferences, preference_keys) do
-    Map.take(user_preferences, preference_keys)
   end
 end
