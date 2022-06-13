@@ -1,13 +1,16 @@
 defmodule GraphqlApiWeb.Types.Preference do
   @moduledoc false
   use Absinthe.Schema.Notation
+  import Absinthe.Resolution.Helpers, only: [dataloader: 2]
 
   @desc "Notification preferences for a users - queries"
   object :preferences do
+    field :id, non_null(:id)
     field :user_id, non_null(:id)
     field :likes_emails, non_null(:boolean)
     field :likes_phone_calls, non_null(:boolean)
     field :likes_faxes, non_null(:boolean)
+    field :user, :user, resolve: dataloader(GraphqlApi.Accounts, :user)
   end
 
   @desc "Notification preferences for a user - mutations"

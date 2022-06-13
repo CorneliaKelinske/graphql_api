@@ -58,6 +58,7 @@ defmodule GraphqlApi.MixProject do
       {:absinthe, "~> 1.7"},
       {:absinthe_plug, "~> 1.5"},
       {:absinthe_phoenix, "~> 2.0"},
+      {:dataloader, "~> 1.0.0"},
 
       # tooling
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},
