@@ -19,6 +19,7 @@ defmodule GraphqlApi.MixProject do
       ],
       dialyzer: [
         plt_add_apps: [:ex_unit, :mix],
+        plt_ignore_apps: [:ecto_shorts],
         list_unused_filters: true,
         ignore_warnings: ".dialyzer-ignore.exs",
         flags: [:unmatched_returns, :no_improper_lists]
@@ -59,6 +60,7 @@ defmodule GraphqlApi.MixProject do
       {:absinthe_plug, "~> 1.5"},
       {:absinthe_phoenix, "~> 2.0"},
       {:dataloader, "~> 1.0.0"},
+      {:ecto_shorts, "~> 2.0"},
 
       # tooling
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},

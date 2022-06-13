@@ -10,7 +10,7 @@ defmodule GraphqlApiWeb.Resolvers.Preference do
           {:ok, preferences()} | {:error, error}
   def update_user_preferences(%{user_id: id} = params, _) do
     id = String.to_integer(id)
-
+    params = Map.delete(params, :user_id)
     Accounts.update_preferences(id, params)
   end
 

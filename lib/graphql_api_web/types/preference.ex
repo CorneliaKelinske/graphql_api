@@ -3,7 +3,7 @@ defmodule GraphqlApiWeb.Types.Preference do
   use Absinthe.Schema.Notation
   import Absinthe.Resolution.Helpers, only: [dataloader: 2]
 
-  @desc "Notification preferences for a users - queries"
+  @desc "Notification preferences for a user- queries"
   object :preferences do
     field :id, non_null(:id)
     field :user_id, non_null(:id)

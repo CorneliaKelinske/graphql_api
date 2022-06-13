@@ -11,12 +11,8 @@ defmodule GraphqlApi.Accounts.Test do
   describe "list_users/0" do
     setup [:user]
 
-    test "returns a list of all users", %{user: user} do
-      assert {:ok, [%User{} = test_user]} = Accounts.list_users()
-      IO.inspect(test_user)
-      assert test_user.id === user.id
-      assert test_user.name === user.name
-      assert test_user.email === user.email
+    test "returns a list of all users", %{user: %{id: id, name: name, email: email}} do
+      assert {:ok, [%User{id: ^id, name: ^name, email: ^email}]} = Accounts.list_users()
     end
   end
 
@@ -39,11 +35,12 @@ defmodule GraphqlApi.Accounts.Test do
     setup [:user]
 
     test "updates an existing user", %{user: user} do
-      assert {:ok, %User{} = updated_user} =
+      assert {:ok, [%User{email: "email@example.com"}]} = Accounts.list_users()
+
+      assert {:ok, %User{email: "wizard@example.com"}} =
                Accounts.update_user(user.id, %{email: "wizard@example.com"})
 
-      assert updated_user.email === "wizard@example.com"
-      assert updated_user.id === user.id
+      assert {:ok, [%User{email: "wizard@example.com"}]} = Accounts.list_users()
     end
 
     test "returns tuple with :error and map with error info when no update params are provided",
