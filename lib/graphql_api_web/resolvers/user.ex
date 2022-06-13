@@ -7,7 +7,7 @@ defmodule GraphqlApiWeb.Resolvers.User do
   @type error :: GraphqlApi.Accounts.error()
 
   @spec all(map, resolution()) :: {:ok, [user()]} | {:error, error}
-  def all(params, _) do
+  def all(_params, _) do
     Accounts.list_users()
   end
 

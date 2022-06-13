@@ -3,35 +3,17 @@ defmodule GraphqlApi.AccountsFixtures do
   This module defines test helpers for creating
   entities via the `GraphqlApi.Accounts` context.
   """
+  alias GraphqlApi.Accounts
 
-  @doc """
-  Generate a user.
-  """
-  def user_fixture(attrs \\ %{}) do
+  @valid_user_params %{name: "Harry", email: "email@example.com"}
+  @valid_preference_params %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
+
+  def user(_context) do
     {:ok, user} =
-      attrs
-      |> Enum.into(%{
-        email: "some email",
-        name: "some name"
-      })
-      |> GraphqlApi.Accounts.create_user()
+      @valid_user_params
+      |> Map.put(:preferences, @valid_preference_params)
+      |> Accounts.create_user()
 
-    user
-  end
-
-  @doc """
-  Generate a preference.
-  """
-  def preference_fixture(attrs \\ %{}) do
-    {:ok, preference} =
-      attrs
-      |> Enum.into(%{
-        likes_emails: true,
-        likes_faxes: true,
-        likes_phone_calls: true
-      })
-      |> GraphqlApi.Accounts.create_preference()
-
-    preference
+    %{user: user}
   end
 end

@@ -6,6 +6,8 @@ defmodule GraphqlApi.Accounts do
   import Ecto.Query, warn: false
   alias GraphqlApi.{Accounts.User, Accounts.Preference, Repo}
 
+  defguard empty_map?(map) when map_size(map) === 0
+
   def list_users() do
     {:ok, Repo.all(User)}
   end
@@ -17,6 +19,10 @@ defmodule GraphqlApi.Accounts do
     end
   end
 
+  def update_user(_id, params) when empty_map?(params) do
+    {:error, %{message: "no update params given", details: %{params: params}}}
+  end
+
   def update_user(id, params) do
     with {:ok, user} <- find_user(%{id: id}) do
       user
@@ -26,7 +32,6 @@ defmodule GraphqlApi.Accounts do
   end
 
   def create_user(params) do
-    IO.inspect(params)
     %User{}
     |> User.changeset(params)
     |> Repo.insert()
@@ -40,25 +45,21 @@ defmodule GraphqlApi.Accounts do
     Repo.all(Preference)
   end
 
-  def get_preference!(id), do: Repo.get!(Preference, id)
-
-  def create_preference(attrs \\ %{}) do
-    %Preference{}
-    |> Preference.changeset(attrs)
-    |> Repo.insert()
+  def update_preferences(_id, params) when empty_map?(params) do
+    {:error, %{message: "no update params given", details: %{params: params}}}
   end
 
-  def update_preference(%Preference{} = preference, attrs) do
-    preference
-    |> Preference.changeset(attrs)
-    |> Repo.update()
+  def update_preferences(id, params) do
+    with {:ok, preferences} <- find_preferences_by_user_id(%{id: id}) do
+        preferences = Map.merge(preferences, params)
+        {:ok, preferences}
+    end
   end
 
-  def delete_preference(%Preference{} = preference) do
-    Repo.delete(preference)
-  end
-
-  def change_preference(%Preference{} = preference, attrs \\ %{}) do
-    Preference.changeset(preference, attrs)
+  def find_preferences_by_user_id(%{id: id}) do
+    case Repo.get_by(Preference, user_id: id) do
+      nil -> {:error, "no preferences found for this user ID"}
+      preferences -> {:ok, preferences}
+    end
   end
 end
