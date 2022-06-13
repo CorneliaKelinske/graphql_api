@@ -37,7 +37,7 @@ defmodule GraphqlApiWeb.Schema.Mutations.PreferenceTest do
                      "user" => %{
                        "email" => ^email,
                        "id" => ^user_id,
-                       "name" =>^name
+                       "name" => ^name
                      },
                      "userId" => ^user_id
                    }

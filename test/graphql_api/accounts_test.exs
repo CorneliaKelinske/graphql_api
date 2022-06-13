@@ -20,10 +20,9 @@ defmodule GraphqlApi.Accounts.Test do
     setup [:user]
 
     test "returns a a tuple with :ok and the corresponding user when a given Id exists", %{
-      user: user
+      user: %{id: id, name: name, email: email}
     } do
-      assert {:ok, %User{} = test_user} = Accounts.find_user(%{id: user.id})
-      assert test_user.name === user.name
+      assert {:ok, %User{id: ^id, name: ^name, email: ^email}} = Accounts.find_user(%{id: id})
     end
 
     test "returns tuple with :error and reason when a given ID does not exist", %{user: user} do
@@ -81,9 +80,8 @@ defmodule GraphqlApi.Accounts.Test do
   describe "list_preferences/0" do
     setup [:user]
 
-    test "returns a list of all preferences", %{user: user} do
-      assert [%Preference{} = preferences] = Accounts.list_preferences()
-      assert preferences.user_id === user.id
+    test "returns a list of all preferences", %{user: %{id: id}} do
+      assert [%Preference{user_id: ^id}] = Accounts.list_preferences()
     end
   end
 
@@ -92,12 +90,9 @@ defmodule GraphqlApi.Accounts.Test do
 
     test "returns a a tuple with :ok and the corresponding preferences when preferences for a given user ID exist",
          %{
-           user: user
+           user: %{id: id}
          } do
-      assert {:ok, %Preference{} = preferences} =
-               Accounts.find_preferences_by_user_id(%{id: user.id})
-
-      assert preferences.user_id === user.id
+      assert {:ok, %Preference{user_id: ^id}} = Accounts.find_preferences_by_user_id(%{id: id})
     end
 
     test "returns tuple with :error and reason when there are no preference for a given user ID",
@@ -110,14 +105,10 @@ defmodule GraphqlApi.Accounts.Test do
   describe "update_preferences/2" do
     setup [:user]
 
-    test "returns updated preferences", %{user: user} do
-      {:ok, %Preference{} = preferences} =
-        Accounts.update_preferences(user.id, %{likes_emails: true})
-
-      assert preferences.likes_emails === true
-      assert preferences.likes_faxes === false
-      assert preferences.likes_phone_calls === false
-      assert preferences.user_id === user.id
+    test "returns updated preferences", %{user: %{id: id}} do
+      {:ok,
+       %Preference{user_id: ^id, likes_emails: true, likes_faxes: false, likes_phone_calls: false}} =
+        Accounts.update_preferences(id, %{likes_emails: true})
     end
 
     test "returns tuple with :error and map with error info when no update params are provided",
