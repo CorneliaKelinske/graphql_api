@@ -13,4 +13,9 @@ defmodule GraphqlApiWeb.Resolvers.Preference do
 
     Accounts.update_preferences(id, params)
   end
+
+  def find_user_preferences(%{user_id: id}, _) do
+    id = String.to_integer(id)
+    Accounts.find_preferences_by_user_id(%{id: id})
+  end
 end

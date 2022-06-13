@@ -51,8 +51,8 @@ defmodule GraphqlApi.Accounts do
 
   def update_preferences(id, params) do
     with {:ok, preferences} <- find_preferences_by_user_id(%{id: id}) do
-        preferences = Map.merge(preferences, params)
-        {:ok, preferences}
+      preferences = Map.merge(preferences, params)
+      {:ok, preferences}
     end
   end
 
