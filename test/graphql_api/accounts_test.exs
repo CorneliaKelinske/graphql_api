@@ -8,14 +8,22 @@ defmodule GraphqlApi.Accounts.Test do
   @valid_user_params %{name: "Harry", email: "dresden@example.com"}
   @valid_preference_params %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
 
-  describe "list_users/1" do
+  describe "all_users/1" do
     setup [:user]
 
     test "returns a list of all users when no parameters are given", %{
       user: %{id: id, name: name, email: email}
     } do
-      assert [%User{id: ^id, name: ^name, email: ^email}] = Accounts.list_users()
+      assert {:ok, [%User{id: ^id, name: ^name, email: ^email}]} = Accounts.all_users()
     end
+
+    test "returns a list of all users matching the given parameter(s)",  %{
+      user: %{id: id, name: name, email: email}
+    } do
+      assert {:ok, [%User{id: ^id, name: ^name, email: ^email}]} = Accounts.all_users(%{email: email})
+      assert {:ok, [%User{id: ^id, name: ^name, email: ^email}]} = Accounts.all_users(%{email: email, name: name})
+    end
+
   end
 
   describe "find_user/1" do
@@ -36,12 +44,12 @@ defmodule GraphqlApi.Accounts.Test do
     setup [:user]
 
     test "updates an existing user", %{user: user} do
-      assert [%User{email: "email@example.com"}] = Accounts.list_users()
+      assert {:ok, [%User{email: "email@example.com"}]} = Accounts.all_users()
 
       assert {:ok, %User{email: "wizard@example.com"}} =
                Accounts.update_user(user.id, %{email: "wizard@example.com"})
 
-      assert [%User{email: "wizard@example.com"}] = Accounts.list_users()
+      assert {:ok, [%User{email: "wizard@example.com"}]} = Accounts.all_users()
     end
 
     test "returns tuple with :error and map with error info when no update params are provided",
@@ -75,16 +83,24 @@ defmodule GraphqlApi.Accounts.Test do
     test "deletes a user including their preferences", %{user: user} do
       Accounts.delete_user(user)
       assert Accounts.find_user(%{id: user.id}) === {:error, "no user with that id"}
-      assert Accounts.list_preferences() === []
+      assert Accounts.all_preferences() === {:ok, []}
     end
   end
 
-  describe "list_preferences/0" do
+  describe "all_preferences/0" do
     setup [:user]
 
-    test "returns a list of all preferences", %{user: %{id: id}} do
-      assert [%Preference{user_id: ^id}] = Accounts.list_preferences()
+    test "returns a list of all preferences when no params are given", %{user: %{id: id}} do
+      assert {:ok, [%Preference{user_id: ^id}]} = Accounts.all_preferences()
     end
+
+    test "returns a list of all sets of preferences matching the given parameter(s)",  %{
+      user: %{id: id}
+    } do
+      assert {:ok, [%Preference{user_id: ^id, likes_emails: false}]} = Accounts.all_preferences(%{likes_emails: false})
+      assert {:ok, [%Preference{user_id: ^id, likes_emails: false, likes_faxes: false}]} = Accounts.all_preferences(%{likes_emails: false, likes_faxes: false})
+    end
+
   end
 
   describe "find_preferences/1" do

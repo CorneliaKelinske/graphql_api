@@ -8,7 +8,7 @@ defmodule GraphqlApiWeb.Resolvers.User do
 
   @spec all(map, resolution()) :: {:ok, [user()]} | {:error, error}
   def all(params, _) do
-    Accounts.list_users(params)
+    Accounts.all_users(params)
   end
 
   @spec find(%{id: String.t()}, resolution()) :: {:ok, user} | {:error, error}

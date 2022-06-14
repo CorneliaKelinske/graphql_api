@@ -9,8 +9,8 @@ defmodule GraphqlApi.Accounts do
 
   defguard empty_map?(map) when map_size(map) === 0
 
-  def list_users(params \\ %{}) do
-    Actions.all(User, params)
+  def all_users(params \\ %{}) do
+    {:ok, Actions.all(User, params)}
   end
 
   def find_user(%{id: id}) do
@@ -42,8 +42,8 @@ defmodule GraphqlApi.Accounts do
     Repo.delete(user)
   end
 
-  def list_preferences do
-    Repo.all(Preference)
+  def all_preferences(params \\ %{}) do
+    {:ok, Actions.all(Preference, params)}
   end
 
   def update_preferences(_id, params) when empty_map?(params) do
