@@ -7,7 +7,6 @@ defmodule GraphqlApi.Accounts do
   alias EctoShorts.Actions
   alias GraphqlApi.{Accounts.User, Accounts.Preference, Repo}
 
-
   defguard empty_map?(map) when map_size(map) === 0
 
   def list_users(params \\ %{}) do

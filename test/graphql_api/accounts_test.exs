@@ -11,7 +11,9 @@ defmodule GraphqlApi.Accounts.Test do
   describe "list_users/1" do
     setup [:user]
 
-    test "returns a list of all users when no parameters are given", %{user: %{id: id, name: name, email: email}} do
+    test "returns a list of all users when no parameters are given", %{
+      user: %{id: id, name: name, email: email}
+    } do
       assert [%User{id: ^id, name: ^name, email: ^email}] = Accounts.list_users()
     end
   end
