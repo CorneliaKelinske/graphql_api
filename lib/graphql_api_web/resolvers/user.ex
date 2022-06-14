@@ -11,10 +11,9 @@ defmodule GraphqlApiWeb.Resolvers.User do
     Accounts.all_users(params)
   end
 
-  @spec find(%{id: String.t()}, resolution()) :: {:ok, user} | {:error, error}
-  def find(%{id: id}, _) do
-    id = String.to_integer(id)
-    Accounts.find_user(%{id: id})
+
+  def find(params, _) do
+    Accounts.find_user(params)
   end
 
   @spec create_user(map, resolution()) :: {:ok, user} | {:error, error}

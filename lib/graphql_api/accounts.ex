@@ -13,11 +13,13 @@ defmodule GraphqlApi.Accounts do
     {:ok, Actions.all(User, params)}
   end
 
-  def find_user(%{id: id}) do
-    case Repo.get(User, id) do
-      nil -> {:error, "no user with that id"}
-      user -> {:ok, user}
-    end
+
+  def find_user(params) when empty_map?(params) do
+    {:error, %{message: "no search params given", details: %{params: params}}}
+  end
+
+  def find_user(params) do
+    Actions.find(User, params)
   end
 
   def update_user(_id, params) when empty_map?(params) do
@@ -51,17 +53,14 @@ defmodule GraphqlApi.Accounts do
   end
 
   def update_preferences(id, params) do
-    with {:ok, preferences} <- find_preferences_by_user_id(%{id: id}) do
+    with {:ok, preferences} <- find_preferences(%{user_id: id}) do
       preferences
       |> Preference.changeset(params)
       |> Repo.update()
     end
   end
 
-  def find_preferences_by_user_id(%{id: id}) do
-    case Repo.get_by(Preference, user_id: id) do
-      nil -> {:error, "no preferences found for this user ID"}
-      preferences -> {:ok, preferences}
-    end
+  def find_preferences(params)  do
+    Actions.find(Preference, params)
   end
 end
