@@ -10,12 +10,16 @@ defmodule GraphqlApiWeb.Schema.Queries.Preference do
       arg :likes_phone_calls, :boolean
       arg :likes_faxes, :boolean
 
+      arg :before, :integer
+      arg :after, :integer
+      arg :first, :integer
+
       resolve &Resolvers.Preference.all/2
     end
 
-    @desc "Returns the preferences for a specific user based "
+    @desc "Returns the preferences for a specific user based on the user_id"
     field :user_preferences, :preferences do
-      arg :user_id, non_null(:integer)
+      arg :user_id, non_null(:id)
 
       resolve &Resolvers.Preference.find_user_preferences/2
     end

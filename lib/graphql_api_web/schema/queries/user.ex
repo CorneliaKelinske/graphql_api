@@ -7,8 +7,13 @@ defmodule GraphqlApiWeb.Schema.Queries.User do
   object :user_queries do
     @desc "Returns a list of all users filtered based on the given parameters"
     field :users, list_of(:user) do
-      arg :name, :string
-      arg :email, :string
+      arg :likes_emails, :boolean
+      arg :likes_phone_calls, :boolean
+      arg :likes_faxes, :boolean
+
+      arg :before, :integer
+      arg :after, :integer
+      arg :first, :integer
 
       resolve &Resolvers.User.all/2
     end

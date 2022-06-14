@@ -10,3 +10,11 @@ Use EctoShorts to make this cleaner and also add filters for `before`/`after`/`f
 
 %{preferences: %{likes_email: true}}
 into EctoShorts
+
+Repo.all from u in User, join: p in Preference, on p.id == u.id, where: p.likes_emails == true
+
+User
+|> join_preferences
+|> where_likes_emails(true)
+
+def by_email(%{likes_emails: likes_emails}) do

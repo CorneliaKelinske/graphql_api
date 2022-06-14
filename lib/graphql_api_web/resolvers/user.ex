@@ -11,7 +11,6 @@ defmodule GraphqlApiWeb.Resolvers.User do
     Accounts.all_users(params)
   end
 
-
   def find(params, _) do
     Accounts.find_user(params)
   end

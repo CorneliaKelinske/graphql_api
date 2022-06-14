@@ -12,8 +12,8 @@ defmodule GraphqlApiWeb.Resolvers.Preference do
 
   @spec update_user_preferences(%{user_id: String.t()}, resolution()) ::
           {:ok, preferences()} | {:error, error}
-  def update_user_preferences(%{user_id: id} = params, _) do
-    Accounts.update_preferences(id, params)
+  def update_user_preferences(%{user_id: user_id} = params, _) do
+    Accounts.update_preferences(user_id, params)
   end
 
   def find_user_preferences(%{user_id: id}, _) do
