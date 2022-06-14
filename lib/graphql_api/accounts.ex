@@ -27,21 +27,15 @@ defmodule GraphqlApi.Accounts do
   end
 
   def update_user(id, params) do
-    with {:ok, user} <- find_user(%{id: id}) do
-      user
-      |> User.changeset(params)
-      |> Repo.update()
-    end
+    Actions.update(User, id, params)
   end
 
   def create_user(params) do
-    %User{}
-    |> User.changeset(params)
-    |> Repo.insert()
+    Actions.create(User, params)
   end
 
   def delete_user(%User{} = user) do
-    Repo.delete(user)
+    Actions.delete(user)
   end
 
   def all_preferences(params \\ %{}) do
@@ -53,11 +47,7 @@ defmodule GraphqlApi.Accounts do
   end
 
   def update_preferences(id, params) do
-    with {:ok, preferences} <- find_preferences(%{user_id: id}) do
-      preferences
-      |> Preference.changeset(params)
-      |> Repo.update()
-    end
+   Actions.update(Preference, id, params)
   end
 
   def find_preferences(params)  do

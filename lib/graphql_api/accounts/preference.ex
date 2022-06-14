@@ -1,7 +1,7 @@
 defmodule GraphqlApi.Accounts.Preference do
   use Ecto.Schema
   import Ecto.Changeset
-  alias GraphqlApi.{Accounts.User}
+  alias GraphqlApi.Accounts.{Preference, User}
 
   schema "preferences" do
     field :likes_emails, :boolean
@@ -13,6 +13,9 @@ defmodule GraphqlApi.Accounts.Preference do
 
   @required_params [:likes_emails, :likes_faxes, :likes_phone_calls]
 
+  # def create_changeset(params) do
+  #   changeset(%Preference{}, params)
+  # end
   @doc false
   def changeset(preference, attrs) do
     preference

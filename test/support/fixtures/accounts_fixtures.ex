@@ -16,4 +16,7 @@ defmodule GraphqlApi.AccountsFixtures do
 
     %{user: user}
   end
+
+
+ 
 end

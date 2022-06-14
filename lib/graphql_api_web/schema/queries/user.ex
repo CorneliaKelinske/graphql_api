@@ -16,7 +16,6 @@ defmodule GraphqlApiWeb.Schema.Queries.User do
     @desc "Gets a user based on the given params"
     field :user, :user do
       arg :id, :id
-      arg :name, :string
       arg :email, :string
 
       resolve &Resolvers.User.find/2

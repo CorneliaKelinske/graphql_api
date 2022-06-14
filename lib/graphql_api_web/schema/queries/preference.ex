@@ -13,9 +13,9 @@ defmodule GraphqlApiWeb.Schema.Queries.Preference do
       resolve &Resolvers.Preference.all/2
     end
 
-    @desc "Returns the preferences for a specific user"
+    @desc "Returns the preferences for a specific user based "
     field :user_preferences, :preferences do
-      arg :user_id, non_null(:id)
+      arg :user_id, non_null(:integer)
 
       resolve &Resolvers.Preference.find_user_preferences/2
     end

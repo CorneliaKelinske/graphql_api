@@ -133,9 +133,10 @@ defmodule GraphqlApi.Accounts.Test do
 end
 
   describe "update_preferences/2" do
-    setup [:user]
 
-    test "returns updated preferences", %{user: %{id: id}} do
+
+    test "returns updated preferences", %{user: user} do
+
       {:ok,
        %Preference{user_id: ^id, likes_emails: true, likes_faxes: false, likes_phone_calls: false}} =
         Accounts.update_preferences(id, %{likes_emails: true})
