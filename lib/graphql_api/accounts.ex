@@ -4,12 +4,14 @@ defmodule GraphqlApi.Accounts do
   """
 
   import Ecto.Query, warn: false
+  alias EctoShorts.Actions
   alias GraphqlApi.{Accounts.User, Accounts.Preference, Repo}
+
 
   defguard empty_map?(map) when map_size(map) === 0
 
-  def list_users() do
-    {:ok, Repo.all(User)}
+  def list_users(params \\ %{}) do
+    Actions.all(User, params)
   end
 
   def find_user(%{id: id}) do

@@ -7,8 +7,8 @@ defmodule GraphqlApiWeb.Resolvers.User do
   @type error :: GraphqlApi.Accounts.error()
 
   @spec all(map, resolution()) :: {:ok, [user()]} | {:error, error}
-  def all(_params, _) do
-    Accounts.list_users()
+  def all(params, _) do
+    Accounts.list_users(params)
   end
 
   @spec find(%{id: String.t()}, resolution()) :: {:ok, user} | {:error, error}
