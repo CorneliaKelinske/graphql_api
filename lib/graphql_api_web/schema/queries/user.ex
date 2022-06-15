@@ -10,6 +10,7 @@ defmodule GraphqlApiWeb.Schema.Queries.User do
       arg :likes_emails, :boolean
       arg :likes_phone_calls, :boolean
       arg :likes_faxes, :boolean
+      arg :name, :string
 
       arg :before, :integer
       arg :after, :integer
