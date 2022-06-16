@@ -23,6 +23,7 @@ defmodule GraphqlApi.Accounts.User do
     user
     |> cast(attrs, @required_params)
     |> validate_required(@required_params)
+    |> unique_constraint(:email)
     |> cast_assoc(:preferences, required: true)
   end
 

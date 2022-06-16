@@ -1,11 +1,47 @@
-# Script for populating the database. You can run it as:
-#
-#     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     GraphqlApi.Repo.insert!(%GraphqlApi.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
+if Mix.env() !== :test do
+
+  alias GraphqlApi.Accounts
+
+  users =
+    [%{
+      id: 1,
+      name: "Bill",
+      email: "bill@gmail.com",
+      preferences: %{
+        likes_emails: false,
+        likes_phone_calls: true,
+        likes_faxes: true
+      }
+    }, %{
+      id: 2,
+      name: "Alice",
+      email: "alice@gmail.com",
+      preferences: %{
+        likes_emails: true,
+        likes_phone_calls: false,
+        likes_faxes: true
+      }
+    }, %{
+      id: 3,
+      name: "Jill",
+      email: "jill@hotmail.com",
+      preferences: %{
+        likes_emails: true,
+        likes_phone_calls: true,
+        likes_faxes: false
+      }
+    }, %{
+      id: 4,
+      name: "Tim",
+      email: "tim@gmail.com",
+      preferences: %{
+        likes_emails: false,
+        likes_phone_calls: false,
+        likes_faxes: false
+      }
+    }]
+
+    for user <- users do
+      Accounts.create_user(user)
+    end
+end

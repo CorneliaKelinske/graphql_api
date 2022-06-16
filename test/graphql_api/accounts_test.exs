@@ -94,6 +94,15 @@ defmodule GraphqlApi.Accounts.Test do
       assert [%User{}] = Repo.all(User)
       assert [%Preference{}] = Repo.all(Preference)
     end
+
+    test "cannot create two users with identical email addresses" do
+      create_params = Map.put(@valid_user_params, :preferences, @valid_preference_params)
+      assert {:ok, %User{id: id, preferences: %Preference{user_id: id}}} =
+        Accounts.create_user(create_params)
+
+      assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(create_params)
+      assert %{email: ["has already been taken"]} == errors_on(changeset)
+    end
   end
 
   describe "delete_user/1" do
