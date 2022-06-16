@@ -15,8 +15,8 @@ defmodule GraphqlApiWeb.Resolvers.User do
     Accounts.find_user(params)
   end
 
-  @spec create_user(map, resolution()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
-  def create_user(params, _) do
+  @spec create_user(any, map, resolution()) :: {:ok, User.t()} | {:error, Ecto.Changeset.t()}
+  def create_user(_, params, _) do
     Accounts.create_user(params)
   end
 

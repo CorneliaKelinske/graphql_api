@@ -1,6 +1,7 @@
 defmodule GraphqlApiWeb.Schema do
   @moduledoc false
   use Absinthe.Schema
+  alias GraphqlApiWeb.Middlewares.HandleChangesetErrors
 
   import_types GraphqlApiWeb.Types.Preference
   import_types GraphqlApiWeb.Types.User
@@ -35,4 +36,12 @@ defmodule GraphqlApiWeb.Schema do
   def plugins do
     [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
+
+  # if it's a field for the mutation object, add this middleware to the end
+  def middleware(middleware, _field, %{identifier: :mutation}) do
+    middleware ++ [HandleChangesetErrors]
+  end
+
+  # if it's any other object keep things as is
+  def middleware(middleware, _field, _object), do: middleware
 end

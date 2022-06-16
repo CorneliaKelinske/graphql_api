@@ -11,7 +11,7 @@ defmodule GraphqlApiWeb.Schema.Mutations.User do
 
       arg :preferences, non_null(:preference_input)
 
-      resolve &Resolvers.User.create_user/2
+      resolve &Resolvers.User.create_user/3
     end
 
     @desc "Updates a user"
