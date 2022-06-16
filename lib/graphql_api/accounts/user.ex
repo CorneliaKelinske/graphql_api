@@ -1,9 +1,16 @@
 defmodule GraphqlApi.Accounts.User do
+  @moduledoc false
   use Ecto.Schema
   import Ecto.Changeset
   import Ecto.Query
   alias GraphqlApi.Accounts.{Preference, User}
-  alias GraphqlApi.Repo
+
+  @type t :: %__MODULE__{
+          id: pos_integer | nil,
+          email: String.t() | nil,
+          name: String.t() | nil,
+          preferences: Preference.t() | nil | Ecto.Association.NotLoaded.t()
+        }
 
   schema "users" do
     field :email, :string
@@ -14,11 +21,12 @@ defmodule GraphqlApi.Accounts.User do
 
   @required_params [:name, :email]
 
+  @spec create_changeset(map) :: Ecto.Changeset.t()
   def create_changeset(params) do
     changeset(%User{}, params)
   end
 
-  @doc false
+  @spec changeset(t, map) :: Ecto.Changeset.t()
   def changeset(user, attrs) do
     user
     |> cast(attrs, @required_params)

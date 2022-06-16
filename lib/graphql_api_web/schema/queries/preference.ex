@@ -4,7 +4,7 @@ defmodule GraphqlApiWeb.Schema.Queries.Preference do
   alias GraphqlApiWeb.Resolvers
 
   object :preference_queries do
-    @desc "Returns a list of all preferences filtered based on the given params; can be used to find all users with those preferences"
+    @desc "Returns a list of all preferences filtered based on the given params"
     field :preferences, list_of(:preferences) do
       arg :likes_emails, :boolean
       arg :likes_phone_calls, :boolean

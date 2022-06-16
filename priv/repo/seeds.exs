@@ -1,9 +1,8 @@
 if Mix.env() !== :test do
-
   alias GraphqlApi.Accounts
 
-  users =
-    [%{
+  users = [
+    %{
       id: 1,
       name: "Bill",
       email: "bill@gmail.com",
@@ -12,7 +11,8 @@ if Mix.env() !== :test do
         likes_phone_calls: true,
         likes_faxes: true
       }
-    }, %{
+    },
+    %{
       id: 2,
       name: "Alice",
       email: "alice@gmail.com",
@@ -21,7 +21,8 @@ if Mix.env() !== :test do
         likes_phone_calls: false,
         likes_faxes: true
       }
-    }, %{
+    },
+    %{
       id: 3,
       name: "Jill",
       email: "jill@hotmail.com",
@@ -30,7 +31,8 @@ if Mix.env() !== :test do
         likes_phone_calls: true,
         likes_faxes: false
       }
-    }, %{
+    },
+    %{
       id: 4,
       name: "Tim",
       email: "tim@gmail.com",
@@ -39,9 +41,10 @@ if Mix.env() !== :test do
         likes_phone_calls: false,
         likes_faxes: false
       }
-    }]
+    }
+  ]
 
-    for user <- users do
-      Accounts.create_user(user)
-    end
+  for user <- users do
+    Accounts.create_user(user)
+  end
 end

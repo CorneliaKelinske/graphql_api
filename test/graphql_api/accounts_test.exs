@@ -8,8 +8,6 @@ defmodule GraphqlApi.Accounts.Test do
   @valid_user_params %{name: "Harry", email: "dresden@example.com"}
   @valid_preference_params %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
 
-
-
   describe "all_users/1" do
     setup [:user]
 
@@ -48,7 +46,8 @@ defmodule GraphqlApi.Accounts.Test do
     end
 
     test "returns a tuple with :error and reason when no search params are given" do
-      assert {:error, %{message: "no search params given", details: %{params: %{}}}} ===
+      assert {:error,
+              %{code: :invalid_params, message: "no search params given", details: %{params: %{}}}} ===
                Accounts.find_user(%{})
     end
 
@@ -79,7 +78,8 @@ defmodule GraphqlApi.Accounts.Test do
 
     test "returns tuple with :error and map with error info when no update params are provided",
          %{user: user} do
-      assert {:error, %{message: "no update params given", details: %{params: %{}}}} ===
+      assert {:error,
+              %{code: :invalid_params, message: "no update params given", details: %{params: %{}}}} ===
                Accounts.update_user(user.id, %{})
     end
   end
@@ -97,8 +97,9 @@ defmodule GraphqlApi.Accounts.Test do
 
     test "cannot create two users with identical email addresses" do
       create_params = Map.put(@valid_user_params, :preferences, @valid_preference_params)
+
       assert {:ok, %User{id: id, preferences: %Preference{user_id: id}}} =
-        Accounts.create_user(create_params)
+               Accounts.create_user(create_params)
 
       assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(create_params)
       assert %{email: ["has already been taken"]} == errors_on(changeset)
@@ -175,7 +176,8 @@ defmodule GraphqlApi.Accounts.Test do
 
     test "returns tuple with :error and map with error info when no update params are provided",
          %{user: user} do
-      assert {:error, %{message: "no update params given", details: %{params: %{}}}} ===
+      assert {:error,
+              %{code: :invalid_params, message: "no update params given", details: %{params: %{}}}} ===
                Accounts.update_preferences(user.id, %{})
     end
   end
