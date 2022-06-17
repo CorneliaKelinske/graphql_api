@@ -1,4 +1,4 @@
-defmodule GraphqlApiWeb.Middlewares.HandleChangesetErrors do
+defmodule GraphqlApiWeb.Middlewares.HandleErrors do
   @moduledoc false
   @behaviour Absinthe.Middleware
 
@@ -15,11 +15,8 @@ defmodule GraphqlApiWeb.Middlewares.HandleChangesetErrors do
     |> Enum.map(fn {k, v} -> "#{k}: #{v}" end)
   end
 
-  defp handle_error(%{message: %Ecto.Changeset{} = changeset}) do
-    changeset
-    |> Ecto.Changeset.traverse_errors(fn {err, _opts} -> err end)
-    |> Enum.map(fn {k, v} -> "#{k}: #{v}" end)
-  end
+  defp handle_error(%ErrorMessage{message: message, code: code}),
+    do: [%{message: message, code: code}]
 
   defp handle_error(error), do: [error]
 end

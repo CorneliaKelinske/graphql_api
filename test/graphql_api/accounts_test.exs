@@ -47,7 +47,11 @@ defmodule GraphqlApi.Accounts.Test do
 
     test "returns a tuple with :error and reason when no search params are given" do
       assert {:error,
-              %{code: :invalid_params, message: "no search params given", details: %{params: %{}}}} ===
+              %ErrorMessage{
+                code: :bad_request,
+                message: "no search params given",
+                details: %{params: %{}}
+              }} ===
                Accounts.find_user(%{})
     end
 
@@ -56,7 +60,7 @@ defmodule GraphqlApi.Accounts.Test do
     } do
       assert Accounts.find_user(%{id: id + 1}) ===
                {:error,
-                %{
+                %ErrorMessage{
                   code: :not_found,
                   details: %{params: %{id: id + 1}, query: GraphqlApi.Accounts.User},
                   message: "no records found"
@@ -79,24 +83,26 @@ defmodule GraphqlApi.Accounts.Test do
     test "returns tuple with :error and map with error info when no update params are provided",
          %{user: user} do
       assert {:error,
-              %{code: :invalid_params, message: "no update params given", details: %{params: %{}}}} ===
+              %ErrorMessage{
+                code: :bad_request,
+                message: "no update params given",
+                details: %{params: %{}}
+              }} ===
                Accounts.update_user(user.id, %{})
     end
 
-    test "returns tuple with :error and map with error info when another user's email is provided", %{user: user} do
+    test "returns tuple with :error and map with error info when another user's email is provided",
+         %{user: user} do
       assert {:ok, [%User{email: "email@example.com"}]} = Accounts.all_users(%{})
       create_params = Map.put(@valid_user_params, :preferences, @valid_preference_params)
 
       assert {:ok, %User{id: id, email: user2_email, preferences: %Preference{user_id: id}}} =
                Accounts.create_user(create_params)
 
-
-      assert {:error, %{
-        code: :bad_request,
-        details: _,
-        message: %Ecto.Changeset{}
-      }} =
+      assert {:error, %Ecto.Changeset{} = changeset} =
                Accounts.update_user(user.id, %{email: user2_email})
+
+      assert %{email: ["has already been taken"]} === errors_on(changeset)
     end
   end
 
@@ -118,7 +124,7 @@ defmodule GraphqlApi.Accounts.Test do
                Accounts.create_user(create_params)
 
       assert {:error, %Ecto.Changeset{} = changeset} = Accounts.create_user(create_params)
-      assert %{email: ["has already been taken"]} == errors_on(changeset)
+      assert %{email: ["has already been taken"]} === errors_on(changeset)
     end
   end
 
@@ -131,7 +137,7 @@ defmodule GraphqlApi.Accounts.Test do
 
       assert Accounts.find_user(%{id: user.id}) ===
                {:error,
-                %{
+                %ErrorMessage{
                   code: :not_found,
                   details: %{params: %{id: id}, query: GraphqlApi.Accounts.User},
                   message: "no records found"
@@ -173,7 +179,7 @@ defmodule GraphqlApi.Accounts.Test do
          %{user: %{id: id}} do
       assert Accounts.find_preferences(%{id: id + 1}) ===
                {:error,
-                %{
+                %ErrorMessage{
                   code: :not_found,
                   details: %{params: %{id: id + 1}, query: GraphqlApi.Accounts.Preference},
                   message: "no records found"
@@ -193,7 +199,11 @@ defmodule GraphqlApi.Accounts.Test do
     test "returns tuple with :error and map with error info when no update params are provided",
          %{user: user} do
       assert {:error,
-              %{code: :invalid_params, message: "no update params given", details: %{params: %{}}}} ===
+              %ErrorMessage{
+                code: :bad_request,
+                message: "no update params given",
+                details: %{params: %{}}
+              }} ===
                Accounts.update_preferences(user.id, %{})
     end
   end

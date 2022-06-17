@@ -7,7 +7,7 @@ defmodule GraphqlApi.Accounts do
   alias EctoShorts.Actions
   alias GraphqlApi.{Accounts.Preference, Accounts.User, Repo}
 
-  @type error :: %{code: atom, message: String.t(), details: map}
+  @type error :: ErrorMessage.t()
 
   defguard empty_map?(map) when map_size(map) === 0
 
@@ -40,8 +40,7 @@ defmodule GraphqlApi.Accounts do
 
   @spec find_user(map) :: {:ok, User.t()} | {:error, error()}
   def find_user(params) when empty_map?(params) do
-    {:error,
-     %{code: :invalid_params, message: "no search params given", details: %{params: params}}}
+    {:error, ErrorMessage.bad_request("no search params given", %{params: params})}
   end
 
   def find_user(params) do
@@ -50,15 +49,14 @@ defmodule GraphqlApi.Accounts do
 
   @spec update_user(pos_integer, map) :: {:ok, User.t()} | {:error, error | Ecto.Changeset.t()}
   def update_user(_id, params) when empty_map?(params) do
-    {:error,
-     %{code: :invalid_params, message: "no update params given", details: %{params: params}}}
+    {:error, ErrorMessage.bad_request("no update params given", %{params: params})}
   end
 
   def update_user(id, params) do
     with {:ok, user} <- find_user(%{id: id}) do
       user
       |> Repo.preload(:preferences)
-      |> then(&Actions.update(User, &1, params)) 
+      |> then(&Actions.update(User, &1, params))
     end
   end
 
@@ -80,8 +78,7 @@ defmodule GraphqlApi.Accounts do
   @spec update_preferences(String.t(), map) ::
           {:ok, Preference.t()} | {:error, error | Ecto.Changeset.t()}
   def update_preferences(_id, params) when empty_map?(params) do
-    {:error,
-     %{code: :invalid_params, message: "no update params given", details: %{params: params}}}
+    {:error, ErrorMessage.bad_request("no update params given", %{params: params})}
   end
 
   def update_preferences(user_id, params) do
