@@ -12,7 +12,7 @@ defmodule GraphqlApiWeb.Middlewares.HandleChangesetErrors do
   defp handle_error(%Ecto.Changeset{} = changeset) do
     changeset
     |> Ecto.Changeset.traverse_errors(fn {err, _opts} -> err end)
-    |> Enum.map(fn {k, v} -> "#{k}: #{v}" end) |> IO.inspect(label: "17", limit: :infinity, charlists: false)
+    |> Enum.map(fn {k, v} -> "#{k}: #{v}" end)
   end
 
   defp handle_error(%{message: %Ecto.Changeset{} = changeset}) do
