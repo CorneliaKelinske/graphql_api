@@ -82,6 +82,22 @@ defmodule GraphqlApi.Accounts.Test do
               %{code: :invalid_params, message: "no update params given", details: %{params: %{}}}} ===
                Accounts.update_user(user.id, %{})
     end
+
+    test "returns tuple with :error and map with error info when another user's email is provided", %{user: user} do
+      assert {:ok, [%User{email: "email@example.com"}]} = Accounts.all_users(%{})
+      create_params = Map.put(@valid_user_params, :preferences, @valid_preference_params)
+
+      assert {:ok, %User{id: id, email: user2_email, preferences: %Preference{user_id: id}}} =
+               Accounts.create_user(create_params)
+
+
+      assert {:error, %{
+        code: :bad_request,
+        details: _,
+        message: %Ecto.Changeset{}
+      }} =
+               Accounts.update_user(user.id, %{email: user2_email})
+    end
   end
 
   describe "create_user/1" do

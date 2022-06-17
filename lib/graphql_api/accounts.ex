@@ -55,7 +55,7 @@ defmodule GraphqlApi.Accounts do
   end
 
   def update_user(id, params) do
-    with {:ok, user} <- find_user(%{id: id}) do
+    with {:ok, user} <- find_user(%{id: id}) |> IO.inspect(label: "58", limit: :infinity, charlists: false) do
       user
       |> Repo.preload(:preferences)
       |> then(&Actions.update(User, &1, params))
