@@ -23,6 +23,8 @@ defmodule GraphqlApi.Accounts.Preference do
 
   @required_params [:likes_emails, :likes_faxes, :likes_phone_calls]
 
+  def required_params, do: @required_params
+
   @spec changeset(t, map) :: Ecto.Changeset.t()
   def changeset(preference, attrs) do
     preference

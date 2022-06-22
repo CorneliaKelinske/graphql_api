@@ -7,7 +7,7 @@ defmodule GraphqlApiWeb.Resolvers.Preference do
 
   @spec all(map, resolution()) :: {:ok, [Preference.t()]}
   def all(params, _) do
-    Accounts.all_preferences(params)
+    {:ok, Accounts.all_preferences(params)}
   end
 
   @spec update_user_preferences(%{user_id: String.t()}, resolution()) ::
