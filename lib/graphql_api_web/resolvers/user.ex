@@ -7,7 +7,7 @@ defmodule GraphqlApiWeb.Resolvers.User do
 
   @spec all(map, resolution()) :: {:ok, [User.t()]} | {:error, error}
   def all(params, _) do
-    Accounts.all_users(params)
+    {:ok, Accounts.all_users(params)}
   end
 
   @spec find(map, resolution()) :: {:ok, User.t()} | {:error, error}

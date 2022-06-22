@@ -14,16 +14,16 @@ defmodule GraphqlApi.Accounts.Test do
     test "returns a list of all users when no parameters are given", %{
       user: %{id: id, name: name, email: email}
     } do
-      assert {:ok, [%User{id: ^id, name: ^name, email: ^email}]} = Accounts.all_users(%{})
+      assert [%User{id: ^id, name: ^name, email: ^email}] = Accounts.all_users(%{})
     end
 
     test "returns a list of all users matching the given parameter(s)", %{
       user: %{id: id, name: name, email: email}
     } do
-      assert {:ok, [%User{id: ^id, name: ^name, email: ^email}]} =
+      assert [%User{id: ^id, name: ^name, email: ^email}] =
                Accounts.all_users(%{likes_emails: false, name: name})
 
-      assert {:ok, [%User{id: ^id, name: ^name, email: ^email}]} =
+      assert [%User{id: ^id, name: ^name, email: ^email}] =
                Accounts.all_users(%{likes_emails: false, likes_phone_calls: false})
     end
   end
@@ -48,9 +48,9 @@ defmodule GraphqlApi.Accounts.Test do
     test "returns a tuple with :error and reason when no search params are given" do
       assert {:error,
               %ErrorMessage{
-                code: :bad_request,
-                message: "no search params given",
-                details: %{params: %{}}
+                code: :not_found,
+                message: "no records found",
+                details: %{params: %{}, query: GraphqlApi.Accounts.User}
               }} ===
                Accounts.find_user(%{})
     end
@@ -72,28 +72,23 @@ defmodule GraphqlApi.Accounts.Test do
     setup [:user]
 
     test "updates an existing user", %{user: user} do
-      assert {:ok, [%User{email: "email@example.com"}]} = Accounts.all_users(%{})
+      assert [%User{email: "email@example.com"}] = Accounts.all_users(%{})
 
       assert {:ok, %User{email: "wizard@example.com"}} =
                Accounts.update_user(user.id, %{email: "wizard@example.com"})
 
-      assert {:ok, [%User{email: "wizard@example.com"}]} = Accounts.all_users(%{})
+      assert [%User{email: "wizard@example.com"}] = Accounts.all_users(%{})
     end
 
-    test "returns tuple with :error and map with error info when no update params are provided",
+    test "returns the unchanged user when no update params are provided",
          %{user: user} do
-      assert {:error,
-              %ErrorMessage{
-                code: :bad_request,
-                message: "no update params given",
-                details: %{params: %{}}
-              }} ===
-               Accounts.update_user(user.id, %{})
+      assert {:ok, %User{email: "email@example.com"}} = Accounts.update_user(user.id, %{})
+      assert [%User{email: "email@example.com"}] = Accounts.all_users(%{})
     end
 
     test "returns tuple with :error and map with error info when another user's email is provided",
          %{user: user} do
-      assert {:ok, [%User{email: "email@example.com"}]} = Accounts.all_users(%{})
+      assert [%User{email: "email@example.com"}] = Accounts.all_users(%{})
       create_params = Map.put(@valid_user_params, :preferences, @valid_preference_params)
 
       assert {:ok, %User{id: id, email: user2_email, preferences: %Preference{user_id: id}}} =
@@ -143,7 +138,7 @@ defmodule GraphqlApi.Accounts.Test do
                   message: "no records found"
                 }}
 
-      assert Accounts.all_preferences() === {:ok, []}
+      assert Accounts.all_preferences() === []
     end
   end
 
@@ -151,16 +146,16 @@ defmodule GraphqlApi.Accounts.Test do
     setup [:user]
 
     test "returns a list of all preferences when no params are given", %{user: %{id: id}} do
-      assert {:ok, [%Preference{user_id: ^id}]} = Accounts.all_preferences()
+      assert [%Preference{user_id: ^id}] = Accounts.all_preferences()
     end
 
     test "returns a list of all sets of preferences matching the given parameter(s)", %{
       user: %{id: id}
     } do
-      assert {:ok, [%Preference{user_id: ^id, likes_emails: false}]} =
+      assert [%Preference{user_id: ^id, likes_emails: false}] =
                Accounts.all_preferences(%{likes_emails: false})
 
-      assert {:ok, [%Preference{user_id: ^id, likes_emails: false, likes_faxes: false}]} =
+      assert [%Preference{user_id: ^id, likes_emails: false, likes_faxes: false}] =
                Accounts.all_preferences(%{likes_emails: false, likes_faxes: false})
     end
   end
@@ -191,20 +186,28 @@ defmodule GraphqlApi.Accounts.Test do
     setup [:user]
 
     test "returns updated preferences", %{user: %{id: id}} do
-      {:ok,
-       %Preference{user_id: ^id, likes_emails: true, likes_faxes: false, likes_phone_calls: false}} =
-        Accounts.update_preferences(id, %{likes_emails: true})
+      assert {:ok,
+              %Preference{
+                user_id: ^id,
+                likes_emails: true,
+                likes_faxes: false,
+                likes_phone_calls: false
+              }} = Accounts.update_preferences(id, %{likes_emails: true})
+
+      assert [%Preference{likes_emails: true}] = Accounts.all_preferences()
     end
 
-    test "returns tuple with :error and map with error info when no update params are provided",
-         %{user: user} do
-      assert {:error,
-              %ErrorMessage{
-                code: :bad_request,
-                message: "no update params given",
-                details: %{params: %{}}
-              }} ===
-               Accounts.update_preferences(user.id, %{})
+    test "returns unchanged preferences when no update params are provided",
+         %{user: %{id: id}} do
+      assert {:ok,
+              %Preference{
+                user_id: ^id,
+                likes_emails: false,
+                likes_faxes: false,
+                likes_phone_calls: false
+              }} = Accounts.update_preferences(id, %{})
+
+      assert [%Preference{likes_emails: false}] = Accounts.all_preferences()
     end
   end
 end
