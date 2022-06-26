@@ -9,15 +9,9 @@ defmodule GraphqlApi.Accounts do
   @type error :: ErrorMessage.t()
   @preference_params Preference.required_params()
 
-  defguard has_preference_filter?(map)
-           when is_map_key(map, :likes_emails) or
-                  is_map_key(map, :likes_faxes) or
-                  is_map_key(map, :likes_phone_calls)
-
   @spec all_users(map) :: [User.t()]
-  def all_users(params \\ %{})
 
-  def all_users(params) when has_preference_filter?(params) do
+  def all_users(params) do
     user_params = Map.drop(params, @preference_params)
 
     params
@@ -26,10 +20,6 @@ defmodule GraphqlApi.Accounts do
       filter, acc -> User.by_preferences(acc, filter)
     end)
     |> Actions.all(user_params)
-  end
-
-  def all_users(params) do
-    Actions.all(User, params)
   end
 
   @spec find_user(map) :: {:ok, User.t()} | {:error, error()}
