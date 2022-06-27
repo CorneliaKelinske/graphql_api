@@ -1,6 +1,6 @@
 defmodule GraphqlApi.Accounts.Test do
   use GraphqlApi.DataCase, async: true
-  import GraphqlApi.AccountsFixtures
+  import GraphqlApi.AccountsFixtures, only: [user: 1]
 
   alias GraphqlApi.{Accounts, Repo}
   alias GraphqlApi.Accounts.{Preference, User}
