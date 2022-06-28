@@ -74,7 +74,7 @@
         {BlitzCredoChecks.NoAsyncFalse, []},
         {BlitzCredoChecks.NoDSLParentheses, []},
         {BlitzCredoChecks.NoIsBitstring, []},
-        {BlitzCredoChecks.SetWarningsAsErrorsInTest, []},
+        {BlitzCredoChecks.SetWarningsAsErrorsInTest, false},
         {BlitzCredoChecks.StrictComparison, []},
         {BlitzCredoChecks.UseStream, []},
         {BlitzCredoChecks.ImproperImport,

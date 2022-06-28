@@ -39,10 +39,11 @@ defmodule GraphqlApiWeb.Schema.Subscriptions.PreferenceTest do
   describe "@updated_user_preferences" do
     setup :user
 
-    test "sends a user when @updatedUserPreferences mutation is triggered", %{
-      socket: socket,
-      user: %{name: name, email: email, id: id}
-    } do
+    test "sends a set of updated user preferences when @updatedUserPreferences mutation is triggered",
+         %{
+           socket: socket,
+           user: %{name: name, email: email, id: id}
+         } do
       user_id = to_string(id)
 
       ref = push_doc(socket, @updated_user_preferences_doc, variables: %{"userId" => id})
@@ -57,32 +58,35 @@ defmodule GraphqlApiWeb.Schema.Subscriptions.PreferenceTest do
       assert_reply ref, :ok, reply
 
       assert %{
-        data: %{"updateUserPreferences" => %{
-          "userId" => ^user_id,
-          "likesEmails" => true,
-          "user" => %{
-            "name" => ^name,
-            "email" => ^email
-          }
-        }}
-      } = reply
+               data: %{
+                 "updateUserPreferences" => %{
+                   "userId" => ^user_id,
+                   "likesEmails" => true,
+                   "user" => %{
+                     "name" => ^name,
+                     "email" => ^email
+                   }
+                 }
+               }
+             } = reply
 
       assert_push "subscription:data", data
 
       assert %{
-        subscriptionId: ^subscription_id,
-        result: %{
-          data: %{"updatedUserPreferences" => %{
-            "userId" => ^user_id,
-            "likesEmails" => true,
-            "user" => %{
-              "name" => ^name,
-              "email" => ^email
-            }
-          }}
-        }
-      } = data
-
+               subscriptionId: ^subscription_id,
+               result: %{
+                 data: %{
+                   "updatedUserPreferences" => %{
+                     "userId" => ^user_id,
+                     "likesEmails" => true,
+                     "user" => %{
+                       "name" => ^name,
+                       "email" => ^email
+                     }
+                   }
+                 }
+               }
+             } = data
     end
   end
 end

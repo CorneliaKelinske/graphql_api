@@ -4,6 +4,8 @@ defmodule GraphqlApiWeb.SubscriptionCase do
   subscription tests.
   """
   use ExUnit.CaseTemplate
+  alias Absinthe.Phoenix.SubscriptionTest
+  alias Phoenix.ChannelTest
 
   using do
     quote do
@@ -11,8 +13,8 @@ defmodule GraphqlApiWeb.SubscriptionCase do
       use Absinthe.Phoenix.SubscriptionTest, schema: GraphqlApiWeb.Schema
 
       setup do
-        {:ok, socket} = Phoenix.ChannelTest.connect(GraphqlApiWeb.UserSocket, %{})
-        {:ok, socket} = Absinthe.Phoenix.SubscriptionTest.join_absinthe(socket)
+        {:ok, socket} = ChannelTest.connect(GraphqlApiWeb.UserSocket, %{})
+        {:ok, socket} = SubscriptionTest.join_absinthe(socket)
 
         {:ok, %{socket: socket}}
       end
