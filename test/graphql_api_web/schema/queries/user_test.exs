@@ -97,4 +97,50 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
               }} = Absinthe.run(@all_users_doc, Schema, variables: %{"after" => id})
     end
   end
+
+  @find_user_doc """
+  query User($id: ID, $email: String ) {
+    user (id: $id, email: $email) {
+     id
+     name
+     email
+      preferences {
+        id
+        user_id
+        likes_emails
+        likes_phone_calls
+        likes_faxes
+      }
+    }
+  }
+  """
+
+  describe "@user" do
+    setup [:user]
+
+    test "fetches a user based on their id", %{user: %{name: name, email: email, id: id}} do
+      user_id = to_string(id)
+
+      assert {
+        :ok,
+        %{
+          data: %{
+            "user" =>
+              %{
+                "id" => ^user_id,
+                "name" => ^name,
+                "email" => ^email,
+                "preferences" => %{
+                  "likes_emails" => false,
+                  "likes_faxes" => false,
+                  "likes_phone_calls" => false,
+                  "user_id" => ^user_id
+                }
+              }
+
+          }
+        }
+      } = Absinthe.run(@find_user_doc, Schema, variables: %{"id" => id})
+    end
+  end
 end
