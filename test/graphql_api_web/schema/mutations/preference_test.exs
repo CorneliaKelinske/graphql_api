@@ -7,6 +7,7 @@ defmodule GraphqlApiWeb.Schema.Mutations.PreferenceTest do
   @update_user_preferences_doc """
   mutation UpdateUserPreferences($userId: ID!, $likesEmails: Boolean, $likesPhoneCalls: Boolean, $likesFaxes: Boolean) {
     updateUserPreferences (userId: $userId, likesEmails: $likesEmails, likesPhoneCalls: $likesPhoneCalls, likesFaxes: $likesFaxes) {
+      id
       userId
       likesEmails
       likesPhoneCalls

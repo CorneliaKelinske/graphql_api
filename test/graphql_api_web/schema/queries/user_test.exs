@@ -143,4 +143,6 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
       } = Absinthe.run(@find_user_doc, Schema, variables: %{"id" => id})
     end
   end
+
+
 end
