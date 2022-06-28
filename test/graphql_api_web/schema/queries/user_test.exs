@@ -52,7 +52,7 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
              } = Absinthe.run(@all_users_doc, Schema, variables: %{"likesEmails" => false})
     end
 
-    test "fetches the users after the x-th user", %{user: %{id: id}} do
+    test "fetches the users after the n-th user", %{user: %{id: id}} do
       assert {:ok, user2} =
                %{name: "Bob", email: "spirit@skull.com"}
                |> Map.put(:preferences, @valid_preference_params)
