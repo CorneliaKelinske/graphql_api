@@ -25,7 +25,7 @@ defmodule GraphqlApiWeb.Schema.Queries.PreferenceTest do
   """
 
   describe "@preferences" do
-    setup [:user]
+    setup :user
 
   test "fetches all sets of preferences based on a given preference filter", %{user: %{name: name, email: email, id: id}} do
     user_id = to_string(id)
@@ -105,7 +105,7 @@ defmodule GraphqlApiWeb.Schema.Queries.PreferenceTest do
   end
   end
 
-  @find_preferences_doc """
+  @find_user_preferences_doc """
   query UserPreferences($userId: ID!){
     userPreferences (userId: $userId) {
       id
@@ -123,7 +123,7 @@ defmodule GraphqlApiWeb.Schema.Queries.PreferenceTest do
   """
 
   describe "@user_preferences" do
-    setup [:user]
+    setup :user
 
    test "fetches a set of preferences based on the user_id", %{user: %{name: name, email: email, id: id}} do
     user_id = to_string(id)
@@ -147,7 +147,7 @@ defmodule GraphqlApiWeb.Schema.Queries.PreferenceTest do
         }
       }
     } =
-      Absinthe.run(@find_preferences_doc, Schema,
+      Absinthe.run(@find_user_preferences_doc, Schema,
         variables: %{"userId" => id}
       )
 

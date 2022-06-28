@@ -9,7 +9,7 @@ defmodule GraphqlApi.Accounts.Test do
   @valid_preference_params %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
 
   describe "all_users/1" do
-    setup [:user]
+    setup :user
 
     test "returns a list of all users when no parameters are given", %{
       user: %{id: id, name: name, email: email}
@@ -29,7 +29,7 @@ defmodule GraphqlApi.Accounts.Test do
   end
 
   describe "find_user/1" do
-    setup [:user]
+    setup :user
 
     test "returns a a tuple with :ok and the corresponding user when a matching user exists", %{
       user: %{id: id, name: name, email: email}
@@ -69,7 +69,7 @@ defmodule GraphqlApi.Accounts.Test do
   end
 
   describe "update_user/2" do
-    setup [:user]
+    setup :user
 
     test "updates an existing user", %{user: user} do
       assert [%User{email: "email@example.com"}] = Accounts.all_users(%{})
@@ -124,7 +124,7 @@ defmodule GraphqlApi.Accounts.Test do
   end
 
   describe "delete_user/1" do
-    setup [:user]
+    setup :user
 
     test "deletes a user including their preferences", %{user: user} do
       id = user.id
@@ -143,7 +143,7 @@ defmodule GraphqlApi.Accounts.Test do
   end
 
   describe "all_preferences/0" do
-    setup [:user]
+    setup :user
 
     test "returns a list of all preferences when no params are given", %{user: %{id: id}} do
       assert [%Preference{user_id: ^id}] = Accounts.all_preferences()
@@ -161,7 +161,7 @@ defmodule GraphqlApi.Accounts.Test do
   end
 
   describe "find_preferences/1" do
-    setup [:user]
+    setup :user
 
     test "returns a a tuple with :ok and the corresponding preferences when preferences for a given user ID exist",
          %{
@@ -183,7 +183,7 @@ defmodule GraphqlApi.Accounts.Test do
   end
 
   describe "update_preferences/2" do
-    setup [:user]
+    setup :user
 
     test "returns updated preferences", %{user: %{id: id}} do
       assert {:ok,

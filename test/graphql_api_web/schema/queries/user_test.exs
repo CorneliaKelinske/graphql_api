@@ -1,5 +1,5 @@
 defmodule GraphqlApiWeb.Schema.Queries.UserTest do
-  use GraphqlApi.DataCase
+  use GraphqlApi.DataCase, async: true
 
   import GraphqlApi.AccountsFixtures, only: [user: 1]
   alias GraphqlApi.Accounts
@@ -25,7 +25,7 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
   """
 
   describe "@users" do
-    setup [:user]
+    setup :user
 
     test "fetches users by preferences", %{user: %{name: name, email: email, id: id}} do
       user_id = to_string(id)
@@ -116,7 +116,7 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
   """
 
   describe "@user" do
-    setup [:user]
+    setup :user
 
     test "fetches a user based on their id", %{user: %{name: name, email: email, id: id}} do
       user_id = to_string(id)
