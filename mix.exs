@@ -11,12 +11,6 @@ defmodule GraphqlApi.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      preferred_cli_env: [
-        dialyzer: :dev,
-        coveralls: :dev,
-        credo: :dev,
-        check: :dev
-      ],
       dialyzer: [
         plt_add_apps: [:ex_unit, :mix],
         plt_ignore_apps: [:ecto_shorts],

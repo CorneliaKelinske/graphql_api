@@ -7,6 +7,8 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
 
   @valid_preference_params %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
 
+  setup :user
+
   @all_users_doc """
   query Users($likesEmails: Boolean, $likesPhoneCalls: Boolean, $likesFaxes: Boolean, $name: String, $before: Int, $after: Int, $first: Int ) {
     users (likesEmails: $likesEmails, likesPhoneCalls: $likesPhoneCalls, likesFaxes: $likesFaxes, name: $name, before: $before, after: $after, first: $first) {
@@ -25,8 +27,6 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
   """
 
   describe "@users" do
-    setup :user
-
     test "fetches users by preferences", %{user: %{name: name, email: email, id: id}} do
       user_id = to_string(id)
 
@@ -116,33 +116,27 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
   """
 
   describe "@user" do
-    setup :user
-
     test "fetches a user based on their id", %{user: %{name: name, email: email, id: id}} do
       user_id = to_string(id)
 
       assert {
-        :ok,
-        %{
-          data: %{
-            "user" =>
-              %{
-                "id" => ^user_id,
-                "name" => ^name,
-                "email" => ^email,
-                "preferences" => %{
-                  "likes_emails" => false,
-                  "likes_faxes" => false,
-                  "likes_phone_calls" => false,
-                  "user_id" => ^user_id
-                }
-              }
-
-          }
-        }
-      } = Absinthe.run(@find_user_doc, Schema, variables: %{"id" => id})
+               :ok,
+               %{
+                 data: %{
+                   "user" => %{
+                     "id" => ^user_id,
+                     "name" => ^name,
+                     "email" => ^email,
+                     "preferences" => %{
+                       "likes_emails" => false,
+                       "likes_faxes" => false,
+                       "likes_phone_calls" => false,
+                       "user_id" => ^user_id
+                     }
+                   }
+                 }
+               }
+             } = Absinthe.run(@find_user_doc, Schema, variables: %{"id" => id})
     end
   end
-
-
 end

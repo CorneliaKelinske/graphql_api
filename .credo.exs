@@ -88,9 +88,9 @@
            [:ExUnit],
            [:Mix],
            [:Gettext],
-           [:ErrorHelpers]
+           [:ErrorHelpers],
+           [:Telemetry]
          ]},
-        {BlitzCredoChecks.TodosNeedTickets, ticket_url: "https://linear.app/vardy/issue/"},
         #
         ## Consistency Checks
         #
