@@ -11,12 +11,6 @@ defmodule GraphqlApi.MixProject do
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps(),
-      preferred_cli_env: [
-        dialyzer: :dev,
-        coveralls: :dev,
-        credo: :dev,
-        check: :dev
-      ],
       dialyzer: [
         plt_add_apps: [:ex_unit, :mix],
         plt_ignore_apps: [:ecto_shorts],
@@ -65,7 +59,8 @@ defmodule GraphqlApi.MixProject do
       # tooling
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},
       {:ex_check, "~> 0.14.0", only: :dev, runtime: false},
-      {:credo, "~> 1.5", only: :dev, runtime: false}
+      {:credo, "~> 1.5", only: :dev, runtime: false},
+      {:blitz_credo_checks, "~> 0.1.5", only: [:dev], runtime: false}
     ]
   end
 
