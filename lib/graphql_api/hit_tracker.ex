@@ -21,6 +21,6 @@ defmodule GraphqlApi.HitTracker do
   end
 
   def get_hits(name \\ @default_name, request) do
-    Agent.get(name, &Map.get(&1, request, 0))
+    Agent.get(name, &Map.get(&1, request, 0)) |> IO.inspect(label: "24", limit: :infinity, charlists: false)
   end
 end
