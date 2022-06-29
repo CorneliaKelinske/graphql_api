@@ -1,5 +1,5 @@
 defmodule GraphqlApiWeb.Resolvers.ResolverHit do
-    @moduledoc false
+  @moduledoc false
 
   alias GraphqlApi.HitTracker
 

@@ -12,5 +12,4 @@ defmodule GraphqlApiWeb.Schema.Queries.ResolverHit do
       resolve &Resolvers.ResolverHit.get_hits/2
     end
   end
-
 end

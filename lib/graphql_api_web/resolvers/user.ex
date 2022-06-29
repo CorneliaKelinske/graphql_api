@@ -27,6 +27,7 @@ defmodule GraphqlApiWeb.Resolvers.User do
           {:ok, User.t()} | {:error, error | Ecto.Changeset.t()}
   def update_user(%{id: id} = params, _) do
     HitTracker.add_hit(:UPDATE_USER)
+
     id
     |> String.to_integer()
     |> Accounts.update_user(Map.delete(params, :id))

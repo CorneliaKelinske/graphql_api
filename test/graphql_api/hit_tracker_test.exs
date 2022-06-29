@@ -17,11 +17,11 @@ defmodule GraphqlApi.HitTracker.Test do
   end
 
   describe "add_hit/2" do
-    test "increments the number of hits stored for a given request, every time the request is sent", %{pid: pid} do
+    test "increments the number of hits stored for a given request, every time the request is sent",
+         %{pid: pid} do
       assert :ok = HitTracker.add_hit(pid, @request)
       assert :ok = HitTracker.add_hit(pid, @request)
       assert HitTracker.get_hits(pid, @request) === 2
-
     end
   end
 end

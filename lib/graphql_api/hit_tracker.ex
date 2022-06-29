@@ -6,6 +6,17 @@ defmodule GraphqlApi.HitTracker do
   use Agent
   alias GraphqlApi.HitTracker
 
+  @request_types [
+    :PREFERENCES,
+    :USER_PREFERENCES,
+    :USERS,
+    :USER,
+    :RESOLVER_HITS,
+    :UPDATE_USER_PREFERENCES,
+    :CREATE_USER,
+    :UPDATE_USER
+  ]
+
   @default_name HitTracker
 
   def start_link(opts \\ []) do
@@ -21,6 +32,8 @@ defmodule GraphqlApi.HitTracker do
   end
 
   def get_hits(name \\ @default_name, request) do
-    Agent.get(name, &Map.get(&1, request, 0)) |> IO.inspect(label: "24", limit: :infinity, charlists: false)
+    Agent.get(name, &Map.get(&1, request, 0))
   end
+
+  def request_types, do: @request_types
 end
