@@ -1,4 +1,4 @@
-defmodule GraphqlApiWeb.Schema.Queries.ResolverHit do
+defmodule GraphqlApiWeb.Schema.Queries.ResolverHitTest do
   use GraphqlApi.DataCase, async: true
 
   alias GraphqlApiWeb.Schema

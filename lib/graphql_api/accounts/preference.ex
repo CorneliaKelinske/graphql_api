@@ -13,6 +13,9 @@ defmodule GraphqlApi.Accounts.Preference do
           user: User.t() | nil | Ecto.Association.NotLoaded.t()
         }
 
+  @type required_param :: :likes_emails | :likes_faxes | :likes_phone_calls
+  @type required_params :: [required_param]
+
   schema "preferences" do
     field :likes_emails, :boolean
     field :likes_faxes, :boolean
@@ -23,6 +26,7 @@ defmodule GraphqlApi.Accounts.Preference do
 
   @required_params [:likes_emails, :likes_faxes, :likes_phone_calls]
 
+  @spec required_params :: required_params()
   def required_params, do: @required_params
 
   @spec changeset(t, map) :: Ecto.Changeset.t()

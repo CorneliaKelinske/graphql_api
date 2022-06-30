@@ -1,9 +1,9 @@
-defmodule GraphqlApi.HitTracker.Test do
+defmodule GraphqlApi.HitTrackerTest do
   use ExUnit.Case, async: true
 
   alias GraphqlApi.HitTracker
 
-  @request "create_user"
+  @request :CREATE_USER
 
   setup do
     {:ok, pid} = HitTracker.start_link(name: nil)

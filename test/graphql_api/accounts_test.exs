@@ -1,4 +1,4 @@
-defmodule GraphqlApi.Accounts.Test do
+defmodule GraphqlApi.AccountsTest do
   use GraphqlApi.DataCase, async: true
   import GraphqlApi.AccountsFixtures, only: [user: 1]
 
