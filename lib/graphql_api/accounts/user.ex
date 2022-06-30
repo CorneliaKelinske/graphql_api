@@ -35,14 +35,21 @@ defmodule GraphqlApi.Accounts.User do
     |> cast_assoc(:preferences, required: true)
   end
 
+  @spec join_preferences :: Ecto.Queryable.t()
+  @spec join_preferences(Ecto.Queryable.t()) :: Ecto.Query.t()
   def join_preferences(query \\ User) do
     join(query, :inner, [u], p in assoc(u, :preferences), as: :preferences)
   end
 
+  @spec by_preferences({Preference.required_param(), boolean}) :: Ecto.Query.t()
+  @spec by_preferences(Ecto.Queryable.t(), {Preference.required_param(), boolean}) ::
+          Ecto.Query.t()
   def by_preferences(query \\ join_preferences(), {filter, boolean}) do
     where(query, [preferences: p], field(p, ^filter) == ^boolean)
   end
 
+  @spec by_name(String.t()) :: Ecto.Query.t()
+  @spec by_name(Ecto.Queryable.t(), String.t()) :: Ecto.Query.t()
   def by_name(query \\ User, name) do
     where(query, [u], u.name == ^name)
   end

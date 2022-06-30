@@ -5,8 +5,11 @@ defmodule GraphqlApiWeb.Schema do
 
   import_types GraphqlApiWeb.Types.Preference
   import_types GraphqlApiWeb.Types.User
+  import_types GraphqlApiWeb.Types.Request
+  import_types GraphqlApiWeb.Types.ResolverHit
   import_types GraphqlApiWeb.Schema.Queries.Preference
   import_types GraphqlApiWeb.Schema.Queries.User
+  import_types GraphqlApiWeb.Schema.Queries.ResolverHit
   import_types GraphqlApiWeb.Schema.Mutations.Preference
   import_types GraphqlApiWeb.Schema.Mutations.User
   import_types GraphqlApiWeb.Schema.Subscriptions.Preference
@@ -15,6 +18,7 @@ defmodule GraphqlApiWeb.Schema do
   query do
     import_fields :preference_queries
     import_fields :user_queries
+    import_fields :resolver_hit_queries
   end
 
   mutation do

@@ -10,7 +10,6 @@ defmodule GraphqlApi.Accounts do
   @preference_params Preference.required_params()
 
   @spec all_users(map) :: [User.t()]
-
   def all_users(params) do
     user_params = Map.drop(params, @preference_params)
 
