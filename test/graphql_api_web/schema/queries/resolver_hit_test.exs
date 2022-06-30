@@ -30,14 +30,17 @@ defmodule GraphqlApiWeb.Schema.Queries.ResolverHit do
   """
 
   describe "@resolver_hits" do
-
     test "returns an increased count for a given request after the request has been sent to the server" do
       assert {:ok, %{data: %{"resolverHits" => %{"count" => count, "key" => "RESOLVER_HITS"}}}} =
-        Absinthe.run(@resolver_hits_doc, Schema, variables: %{"key" => "RESOLVER_HITS"})
+               Absinthe.run(@resolver_hits_doc, Schema, variables: %{"key" => "RESOLVER_HITS"})
+
       assert {:ok, %{data: _data}} = Absinthe.run(@all_users_doc, Schema)
-      assert {:ok, %{data: %{"resolverHits" => %{"count" => new_count, "key" => "RESOLVER_HITS"}}}} =
-        Absinthe.run(@resolver_hits_doc, Schema, variables: %{"key" => "RESOLVER_HITS"})
-      assert new_count === count+1
+
+      assert {:ok,
+              %{data: %{"resolverHits" => %{"count" => new_count, "key" => "RESOLVER_HITS"}}}} =
+               Absinthe.run(@resolver_hits_doc, Schema, variables: %{"key" => "RESOLVER_HITS"})
+
+      assert new_count === count + 1
     end
   end
 end
