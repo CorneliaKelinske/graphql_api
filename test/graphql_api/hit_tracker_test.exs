@@ -3,7 +3,7 @@ defmodule GraphqlApi.HitTrackerTest do
 
   alias GraphqlApi.HitTracker
 
-  @request :CREATE_USER
+  @request :create_user
 
   setup do
     {:ok, pid} = HitTracker.start_link(name: nil)
