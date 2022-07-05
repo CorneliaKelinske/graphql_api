@@ -7,24 +7,24 @@ defmodule GraphqlApi.HitTracker do
   alias GraphqlApi.HitTracker
 
   @type request ::
-          :PREFERENCES
-          | :USER_PREFERENCES
-          | :USERS
-          | :USER
-          | :RESOLVER_HITS
-          | :UPDATE_USER_PREFERENCES
-          | :CREATE_USER
-          | :UPDATE_USER
+          :preferences
+          | :user_preferences
+          | :users
+          | :user
+          | :resolver_hits
+          | :update_user_preferences
+          | :create_user
+          | :update_user
 
   @request_types [
-    :PREFERENCES,
-    :USER_PREFERENCES,
-    :USERS,
-    :USER,
-    :RESOLVER_HITS,
-    :UPDATE_USER_PREFERENCES,
-    :CREATE_USER,
-    :UPDATE_USER
+    :preferences,
+    :user_preferences,
+    :users,
+    :user,
+    :resolver_hits,
+    :update_user_preferences,
+    :create_user,
+    :update_user
   ]
 
   @default_name HitTracker
