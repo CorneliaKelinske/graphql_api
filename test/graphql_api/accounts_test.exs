@@ -142,7 +142,7 @@ defmodule GraphqlApi.AccountsTest do
     end
   end
 
-  describe "all_preferences/0" do
+  describe "all_preferences/1" do
     setup :user
 
     test "returns a list of all preferences when no params are given", %{user: %{id: id}} do
