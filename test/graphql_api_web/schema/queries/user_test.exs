@@ -138,5 +138,44 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
                }
              } = Absinthe.run(@find_user_doc, Schema, variables: %{"id" => id})
     end
+
+    test "fetches a user based on their email", %{user: %{name: name, email: email, id: id}} do
+      user_id = to_string(id)
+
+      assert {
+               :ok,
+               %{
+                 data: %{
+                   "user" => %{
+                     "id" => ^user_id,
+                     "name" => ^name,
+                     "email" => ^email,
+                     "preferences" => %{
+                       "user_id" => ^user_id,
+                       "likes_emails" => false,
+                       "likes_faxes" => false,
+                       "likes_phone_calls" => false
+                     }
+                   }
+                 }
+               }
+             } = Absinthe.run(@find_user_doc, Schema, variables: %{"email" => email})
+    end
+
+    test "returns an error message when a user with the given email does not exist" do
+      assert {:ok,
+              %{
+                data: %{"user" => nil},
+                errors: [
+                  %{
+                    code: :not_found,
+                    locations: [%{column: 3, line: 2}],
+                    message: "no records found",
+                    details: %{params: %{email: "RandomEmail"}, query: GraphqlApi.Accounts.User},
+                    path: ["user"]
+                  }
+                ]
+              }} = Absinthe.run(@find_user_doc, Schema, variables: %{"email" => "RandomEmail"})
+    end
   end
 end

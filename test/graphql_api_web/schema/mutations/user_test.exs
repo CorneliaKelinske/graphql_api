@@ -22,14 +22,16 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
   }
   """
 
-  describe "@create_user" do
-    test "creates a new user" do
-      preferences = %{
-        "likesEmails" => true,
-        "likesFaxes" => false,
-        "likesPhoneCalls" => false
-      }
+  @preferences %{
+    "likesEmails" => true,
+    "likesFaxes" => false,
+    "likesPhoneCalls" => false
+  }
 
+  describe "@create_user" do
+    setup :user
+
+    test "creates a new user" do
       assert {
                :ok,
                %{
@@ -50,11 +52,32 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
                  variables: %{
                    "name" => "Molly",
                    "email" => "molly@example.com",
-                   "preferences" => preferences
+                   "preferences" => @preferences
                  }
                )
 
       assert {:ok, %{name: "Molly"}} = Accounts.find_user(%{email: "molly@example.com"})
+    end
+
+    test "returns a changeset error when user email already exists", %{user: %{email: email}} do
+      assert {:ok,
+              %{
+                data: %{"createUser" => nil},
+                errors: [
+                  %{
+                    locations: [%{column: 3, line: 2}],
+                    message: "email: has already been taken",
+                    path: ["createUser"]
+                  }
+                ]
+              }} =
+               Absinthe.run(@create_user_doc, Schema,
+                 variables: %{
+                   "name" => "Molly",
+                   "email" => email,
+                   "preferences" => @preferences
+                 }
+               )
     end
   end
 

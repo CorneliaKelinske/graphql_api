@@ -146,5 +146,28 @@ defmodule GraphqlApiWeb.Schema.Queries.PreferenceTest do
                }
              } = Absinthe.run(@find_user_preferences_doc, Schema, variables: %{"userId" => id})
     end
+
+    test "returns an error message when a set of preferences with the given user_id does not exist",
+         %{user: %{id: id}} do
+      user_id = to_string(id + 1)
+
+      assert {:ok,
+              %{
+                data: %{"userPreferences" => nil},
+                errors: [
+                  %{
+                    code: :not_found,
+                    details: %{
+                      params: %{user_id: ^user_id},
+                      query: GraphqlApi.Accounts.Preference
+                    },
+                    locations: [%{column: 3, line: 2}],
+                    message: "no records found",
+                    path: ["userPreferences"]
+                  }
+                ]
+              }} =
+               Absinthe.run(@find_user_preferences_doc, Schema, variables: %{"userId" => id + 1})
+    end
   end
 end
