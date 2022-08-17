@@ -66,8 +66,9 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
                 errors: [
                   %{
                     locations: [%{column: 3, line: 2}],
-                    message: "email: has already been taken",
-                    path: ["createUser"]
+                    message: "email has already been taken",
+                    path: ["createUser"],
+                    details: %{param: :email}
                   }
                 ]
               }} =
