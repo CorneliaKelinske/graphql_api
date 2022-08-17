@@ -1,6 +1,5 @@
 defmodule GraphqlApiWeb.Middlewares.HandleErrors do
   @moduledoc false
-  alias GraphqlApi.ErrorUtils
   @behaviour Absinthe.Middleware
 
   @impl Absinthe.Middleware
@@ -14,8 +13,8 @@ defmodule GraphqlApiWeb.Middlewares.HandleErrors do
     changeset
     |> Ecto.Changeset.traverse_errors(fn {err, _opts} -> err end)
     |> Enum.flat_map(fn {k, v} -> [k, v] end)
-    |> turn_into_tuple()
-    |> get_error_message()
+    |> standardize_error()
+
   end
 
   defp handle_error(%ErrorMessage{message: message, code: code, details: details}) do
@@ -24,15 +23,10 @@ defmodule GraphqlApiWeb.Middlewares.HandleErrors do
 
   defp handle_error(error), do: [error]
 
-  defp turn_into_tuple([k | [v]]) do
-    {k, List.first(v)}
+  defp standardize_error([k | [v]]) do
+    v = List.first(v)
+    [%{message: "#{k} #{v}", code: :conflict, details: %{param: k}}]
   end
 
-  defp get_error_message({k, v}) when v === "has already been taken" do
-    ErrorUtils.on_conflict(k, v)
-  end
 
-  defp get_error_message({k, v}) do
-    ErrorUtils.internal_server_error_found(k, v)
-  end
 end

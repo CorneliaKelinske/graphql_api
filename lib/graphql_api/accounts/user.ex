@@ -31,6 +31,7 @@ defmodule GraphqlApi.Accounts.User do
     user
     |> cast(attrs, @required_params)
     |> validate_required(@required_params)
+    |> validate_format(:email, ~r/^[^\s]+@[^\s]+$/, message: "must have the @ sign and no spaces")
     |> unique_constraint(:email)
     |> cast_assoc(:preferences, required: true)
   end

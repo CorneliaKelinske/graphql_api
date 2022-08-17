@@ -10,6 +10,9 @@ import Config
 config :graphql_api,
   ecto_repos: [GraphqlApi.Repo]
 
+config :graphql_api,
+  secret_key: "Imsecret"
+
 config :ecto_shorts,
   repo: GraphqlApi.Repo,
   error_module: EctoShorts.Actions.Error

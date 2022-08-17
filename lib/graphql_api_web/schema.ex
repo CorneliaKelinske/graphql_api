@@ -1,7 +1,7 @@
 defmodule GraphqlApiWeb.Schema do
   @moduledoc false
   use Absinthe.Schema
-  alias GraphqlApiWeb.Middlewares.HandleErrors
+  alias GraphqlApiWeb.Middlewares.{Authentication, HandleErrors}
 
   import_types GraphqlApiWeb.Types.Preference
   import_types GraphqlApiWeb.Types.User
@@ -41,8 +41,11 @@ defmodule GraphqlApiWeb.Schema do
     [Absinthe.Middleware.Dataloader] ++ Absinthe.Plugin.defaults()
   end
 
+  def middleware(middleware, _, %{identifier: :mutation}) do
+    [Authentication | middleware] ++ [HandleErrors]
+  end
   def middleware(middleware, _, %{identifier: identifier})
-      when identifier in [:query, :subscription, :mutation] do
+      when identifier in [:query, :subscription] do
     middleware ++ [HandleErrors]
   end
 
