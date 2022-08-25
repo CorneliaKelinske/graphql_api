@@ -44,6 +44,7 @@ defmodule GraphqlApiWeb.Schema do
   def middleware(middleware, _, %{identifier: :mutation}) do
     [Authentication | middleware] ++ [HandleErrors]
   end
+
   def middleware(middleware, _, %{identifier: identifier})
       when identifier in [:query, :subscription] do
     middleware ++ [HandleErrors]

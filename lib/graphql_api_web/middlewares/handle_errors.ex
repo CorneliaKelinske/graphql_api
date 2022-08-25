@@ -14,7 +14,6 @@ defmodule GraphqlApiWeb.Middlewares.HandleErrors do
     |> Ecto.Changeset.traverse_errors(fn {err, _opts} -> err end)
     |> Enum.flat_map(fn {k, v} -> [k, v] end)
     |> standardize_error()
-
   end
 
   defp handle_error(%ErrorMessage{message: message, code: code, details: details}) do
@@ -27,6 +26,4 @@ defmodule GraphqlApiWeb.Middlewares.HandleErrors do
     v = List.first(v)
     [%{message: "#{k} #{v}", code: :conflict, details: %{param: k}}]
   end
-
-
 end
