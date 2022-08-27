@@ -2,7 +2,7 @@ defmodule GraphqlApiWeb.Router do
   use GraphqlApiWeb, :router
 
   pipeline :api do
-    #plug :accepts, ["json"]
+    # plug :accepts, ["json"]
     plug GraphqlApiWeb.AuthPlug
   end
 

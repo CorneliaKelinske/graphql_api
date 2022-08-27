@@ -11,7 +11,7 @@ config :graphql_api,
   ecto_repos: [GraphqlApi.Repo]
 
 config :graphql_api,
-  secret_key: "Imsecret"
+  secret_key: "TwoCanKeepASecretIfOneOfThemIsDead"
 
 config :ecto_shorts,
   repo: GraphqlApi.Repo,

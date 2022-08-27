@@ -6,11 +6,12 @@ defmodule GraphqlApiWeb.AuthPlug do
   def init(opts), do: opts
 
   def call(conn, _) do
-
     case get_req_header(conn, "authentication") do
-      [] -> conn
-      secret_key  -> Absinthe.Plug.put_options(conn, context: %{secret_key: List.first(secret_key)})
-    end
+      [] ->
+        conn
 
+      secret_key ->
+        Absinthe.Plug.put_options(conn, context: %{secret_key: List.first(secret_key)})
+    end
   end
 end
