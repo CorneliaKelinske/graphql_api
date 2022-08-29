@@ -54,9 +54,7 @@ defmodule GraphqlApi.Accounts do
           {:ok, Preference.t()} | {:error, error | Ecto.Changeset.t()}
 
   def update_preferences(user_id, params) do
-    with {:ok, preference} <- find_preferences(%{user_id: user_id}) do
-      Actions.update(Preference, preference, params)
-    end
+    Actions.find_and_update(Preference, %{user_id: user_id}, params)
   end
 
   @spec find_preferences(map) :: {:ok, Preference.t()} | {:error, error()}
