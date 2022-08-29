@@ -1,8 +1,10 @@
 defmodule GraphqlApiWeb.Schema.Mutations.PreferenceTest do
   use GraphqlApi.DataCase, async: true
   import GraphqlApi.AccountsFixtures, only: [user: 1]
-  alias GraphqlApi.Accounts
+  alias GraphqlApi.{Accounts, Config}
   alias GraphqlApiWeb.Schema
+
+  @secret_key Config.secret_key()
 
   @update_user_preferences_doc """
   mutation UpdateUserPreferences($userId: ID!, $likesEmails: Boolean, $likesPhoneCalls: Boolean, $likesFaxes: Boolean) {
@@ -48,12 +50,32 @@ defmodule GraphqlApiWeb.Schema.Mutations.PreferenceTest do
                }
              } =
                Absinthe.run(@update_user_preferences_doc, Schema,
-                 variables: %{"userId" => id, "likesEmails" => true}
+                 variables: %{"userId" => id, "likesEmails" => true},
+                 context: %{secret_key: @secret_key}
                )
 
       assert {:ok,
               %{likes_emails: true, likes_faxes: false, likes_phone_calls: false, user_id: ^id}} =
                Accounts.find_preferences(%{user_id: id})
+    end
+
+    test "returns error when no secret key is provided", %{
+      user: %{id: id}
+    } do
+      assert {:ok,
+              %{
+                data: %{"updateUserPreferences" => nil},
+                errors: [
+                  %{
+                    locations: [%{column: 3, line: 2}],
+                    message: "Please enter a secret key",
+                    path: ["updateUserPreferences"]
+                  }
+                ]
+              }} =
+               Absinthe.run(@update_user_preferences_doc, Schema,
+                 variables: %{"userId" => id, "likesEmails" => true}
+               )
     end
   end
 end

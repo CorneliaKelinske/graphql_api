@@ -2,6 +2,10 @@ defmodule GraphqlApiWeb.Schema.Subscriptions.PreferenceTest do
   use GraphqlApiWeb.SubscriptionCase
   import GraphqlApi.AccountsFixtures, only: [user: 1]
 
+  alias GraphqlApi.Config
+
+  @secret_key Config.secret_key()
+
   @update_user_preferences_doc """
   mutation UpdateUserPreferences($userId: ID!, $likesEmails: Boolean, $likesPhoneCalls: Boolean, $likesFaxes: Boolean) {
     updateUserPreferences (userId: $userId, likesEmails: $likesEmails, likesPhoneCalls: $likesPhoneCalls, likesFaxes: $likesFaxes) {
@@ -52,7 +56,8 @@ defmodule GraphqlApiWeb.Schema.Subscriptions.PreferenceTest do
 
       ref =
         push_doc(socket, @update_user_preferences_doc,
-          variables: %{"userId" => id, "likesEmails" => true}
+          variables: %{"userId" => id, "likesEmails" => true},
+          context: %{secret_key: @secret_key}
         )
 
       assert_reply ref, :ok, reply

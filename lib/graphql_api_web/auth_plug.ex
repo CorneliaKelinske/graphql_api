@@ -1,10 +1,25 @@
 defmodule GraphqlApiWeb.AuthPlug do
+  @moduledoc """
+  Implements authentication for mutations via the http header.
+  """
   @behaviour Plug
 
   import Plug.Conn
 
+  @type opts() ::
+          binary()
+          | tuple()
+          | atom()
+          | integer()
+          | float()
+          | [opts()]
+          | %{optional(opts()) => opts()}
+          | MapSet.t()
+
+  @spec init(opts()) :: opts()
   def init(opts), do: opts
 
+  @spec call(Plug.Conn.t(), any) :: Plug.Conn.t()
   def call(conn, _) do
     case get_req_header(conn, "authentication") do
       [] ->

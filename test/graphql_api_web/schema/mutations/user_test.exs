@@ -1,8 +1,10 @@
 defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
   use GraphqlApi.DataCase, async: true
   import GraphqlApi.AccountsFixtures, only: [user: 1]
-  alias GraphqlApi.Accounts
+  alias GraphqlApi.{Accounts, Config}
   alias GraphqlApiWeb.Schema
+
+  @secret_key Config.secret_key()
 
   @create_user_doc """
     mutation CreateUser($name: String!, $email: String!, $preferences: PreferenceInput!){
@@ -53,10 +55,34 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
                    "name" => "Molly",
                    "email" => "molly@example.com",
                    "preferences" => @preferences
-                 }
+                 },
+                 context: %{secret_key: @secret_key}
                )
 
       assert {:ok, %{name: "Molly"}} = Accounts.find_user(%{email: "molly@example.com"})
+    end
+
+    test "returns an error when no secret key is provided" do
+      assert {
+               :ok,
+               %{
+                 data: %{"createUser" => nil},
+                 errors: [
+                   %{
+                     locations: [%{column: 3, line: 2}],
+                     message: "Please enter a secret key",
+                     path: ["createUser"]
+                   }
+                 ]
+               }
+             } =
+               Absinthe.run(@create_user_doc, Schema,
+                 variables: %{
+                   "name" => "Molly",
+                   "email" => "molly@example.com",
+                   "preferences" => @preferences
+                 }
+               )
     end
 
     test "returns a changeset error when user email already exists", %{user: %{email: email}} do
@@ -77,7 +103,8 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
                    "name" => "Molly",
                    "email" => email,
                    "preferences" => @preferences
-                 }
+                 },
+                 context: %{secret_key: @secret_key}
                )
     end
   end
@@ -119,10 +146,35 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
                }
              } =
                Absinthe.run(@update_user_doc, Schema,
-                 variables: %{"id" => user_id, "name" => "Horst", "email" => "horst@example.com"}
+                 variables: %{"id" => user_id, "name" => "Horst", "email" => "horst@example.com"},
+                 context: %{secret_key: @secret_key}
                )
 
       assert {:ok, %{name: "Horst"}} = Accounts.find_user(%{id: id})
+    end
+
+    test "returns error when incorrect secret key is provided", %{user: %{id: id, name: name}} do
+      user_id = to_string(id)
+
+      assert {
+               :ok,
+               %{
+                 data: %{"updateUser" => nil},
+                 errors: [
+                   %{
+                     locations: [%{column: 3, line: 2}],
+                     message: "unauthenticated",
+                     path: ["updateUser"]
+                   }
+                 ]
+               }
+             } =
+               Absinthe.run(@update_user_doc, Schema,
+                 variables: %{"id" => user_id, "name" => "Horst", "email" => "horst@example.com"},
+                 context: %{secret_key: "WrongKey"}
+               )
+
+      assert {:ok, %{name: ^name}} = Accounts.find_user(%{id: id})
     end
   end
 end

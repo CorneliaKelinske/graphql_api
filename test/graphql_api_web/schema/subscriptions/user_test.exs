@@ -1,5 +1,8 @@
 defmodule GraphqlApiWeb.Schema.Subscriptions.UserTest do
   use GraphqlApiWeb.SubscriptionCase
+  alias GraphqlApi.Config
+
+  @secret_key Config.secret_key()
 
   @preferences %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
 
