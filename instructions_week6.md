@@ -1,4 +1,4 @@
-In our OTP Process and Testing Assignment, we created a resolver counter to add to our project, now, we're going to add an error system, and handle some of the errors that could come out of Postgres, so that we get a nice clean error from the GraphQL API. 
+our OTP Process and Testing Assignment, we created a resolver counter to add to our project, now, we're going to add an error system, and handle some of the errors that could come out of Postgres, so that we get a nice clean error from the GraphQL API. 
 
 
 
@@ -28,7 +28,9 @@ Second, we're going to add a new migration to our ecto database using `mix ecto.
 
 Changeset Middleware
 
-Now that we have some potential errors from ecto, we're going to add in a changeset converter middleware, to handle errors that could come up during User creation or updates if there are conflicts from the email. These errors should return `conflict` code, while other errors should return `internal_server_error` until we can figure out the different error types later on. 
+Now that we have some potential errors from ecto, we're going to add in a changeset converter middleware to handle errors that could come up during User creation, or updates if there are conflicts from the email. These errors should return `conflict` code. Any changeset details should pass through and we should add `code: :bad_request` if it's not a conflict.
+
+EctoShorts also returns `ErrorMessage` structs, so lets make sure we handle any of those being returned, and utilise `ErrorMessage.to_jsonable_map` to encode them into serialisable results. , Any other errors should return `internal_server_error` if they don't match something we're expecting.
 
 Don't forget to add it to your middleware pipeline and write tests!
 
@@ -37,6 +39,6 @@ def middleware(middleware, _, %{identifier: identifier}) when identifier === :mu
 end
 This should convert any errors from the creation or user updates into errors that can be passed to absinthe. 
 
-Optional: If you're up for an extra challenge, try adding authentication middleware and only allowing access to the mutations through a secret key, make sure to write tests! 
+We're also going to add an authentication middleware and only allowing access to the mutations through a secret key, make sure to write tests! 
 
 middleware AuthMiddleware, secret_key: "Imsecret"

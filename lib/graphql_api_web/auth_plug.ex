@@ -6,17 +6,7 @@ defmodule GraphqlApiWeb.AuthPlug do
 
   import Plug.Conn
 
-  @type opts() ::
-          binary()
-          | tuple()
-          | atom()
-          | integer()
-          | float()
-          | [opts()]
-          | %{optional(opts()) => opts()}
-          | MapSet.t()
-
-  @spec init(opts()) :: opts()
+  @spec init(Plug.opts()) :: Plug.opts()
   def init(opts), do: opts
 
   @spec call(Plug.Conn.t(), any) :: Plug.Conn.t()
