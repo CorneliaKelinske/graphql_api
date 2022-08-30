@@ -4,7 +4,7 @@ defmodule GraphqlApi.ErrorUtils do
   the GraphQL API
   """
 
-@type response(code) :: %{ code: code, details: map(), message: String.t() }
+  @type response(code) :: %{code: code, details: map(), message: String.t()}
 
   @spec conflict(String.t(), map()) :: response(:conflict)
   def conflict(message, details) do

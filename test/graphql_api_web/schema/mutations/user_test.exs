@@ -95,7 +95,7 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
                     details: %{argument: :email, value: "email@example.com"},
                     message: "has already been taken",
                     path: ["createUser"],
-                    code: :not_found
+                    code: :conflict
                   }
                 ]
               }} =
