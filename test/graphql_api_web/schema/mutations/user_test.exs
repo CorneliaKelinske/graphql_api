@@ -69,9 +69,10 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
                  data: %{"createUser" => nil},
                  errors: [
                    %{
-                     locations: [%{column: 3, line: 2}],
-                     message: "Please enter a secret key",
-                     path: ["createUser"]
+                     message: "See details for more information",
+                     path: ["createUser"],
+                     code: :internal_server_error,
+                     details: %{error: "\"Please enter a secret key\""}
                    }
                  ]
                }
@@ -91,10 +92,10 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
                 data: %{"createUser" => nil},
                 errors: [
                   %{
-                    locations: [%{column: 3, line: 2}],
-                    message: "email has already been taken",
+                    details: %{argument: :email, value: "email@example.com"},
+                    message: "has already been taken",
                     path: ["createUser"],
-                    details: %{param: :email}
+                    code: :not_found
                   }
                 ]
               }} =
@@ -162,9 +163,10 @@ defmodule GraphqlApiWeb.Schema.Mutations.UserTest do
                  data: %{"updateUser" => nil},
                  errors: [
                    %{
-                     locations: [%{column: 3, line: 2}],
-                     message: "unauthenticated",
-                     path: ["updateUser"]
+                     message: "See details for more information",
+                     path: ["updateUser"],
+                     code: :internal_server_error,
+                     details: %{error: "\"unauthenticated\""}
                    }
                  ]
                }
