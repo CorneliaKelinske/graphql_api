@@ -67,7 +67,7 @@ defmodule GraphqlApiWeb.Schema.Mutations.PreferenceTest do
                 data: %{"updateUserPreferences" => nil},
                 errors: [
                   %{
-                    message: "See details for more information",
+                    message: "Internal server error",
                     path: ["updateUserPreferences"],
                     code: :internal_server_error,
                     details: %{error: "\"Please enter a secret key\""}

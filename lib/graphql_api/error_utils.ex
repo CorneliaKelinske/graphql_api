@@ -4,16 +4,18 @@ defmodule GraphqlApi.ErrorUtils do
   the GraphQL API
   """
 
-  @spec conflict(String.t(), map()) :: %{code: :not_found, details: map(), message: String.t()}
+@type response(code) :: %{ code: code, details: map(), message: String.t() }
+
+  @spec conflict(String.t(), map()) :: response(:conflict)
   def conflict(message, details) do
     %{
-      code: :not_found,
+      code: :conflict,
       message: message,
       details: details
     }
   end
 
-  @spec bad_request(String.t(), map()) :: %{code: :bad_request, details: map(), message: String.t()}
+  @spec bad_request(String.t(), map()) :: response(:bad_request)
   def bad_request(message, details) do
     %{
       code: :bad_request,
@@ -22,7 +24,7 @@ defmodule GraphqlApi.ErrorUtils do
     }
   end
 
-  @spec internal_server_error(String.t(), map()) :: %{code: :internal_server_error, details: map(), message: String.t()}
+  @spec internal_server_error(String.t(), map()) :: response(:internal_server_error)
   def internal_server_error(message, details) do
     %{
       code: :internal_server_error,

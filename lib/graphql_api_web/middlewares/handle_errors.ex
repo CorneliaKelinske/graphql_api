@@ -11,6 +11,10 @@ defmodule GraphqlApiWeb.Middlewares.HandleErrors do
     %{resolution | errors: Enum.flat_map(resolution.errors, &handle_error/1)}
   end
 
+  defp handle_error(%ErrorMessage{} = error_message) do
+    [ErrorMessage.to_jsonable_map(error_message)]
+  end
+
   defp handle_error(%Ecto.Changeset{} = changeset) do
     Map.get(changeset.changes, :email)
 
@@ -20,13 +24,9 @@ defmodule GraphqlApiWeb.Middlewares.HandleErrors do
     |> handle_error(changeset.changes)
   end
 
-  defp handle_error(%ErrorMessage{} = error_message) do
-    [ErrorMessage.to_jsonable_map(error_message)]
-  end
-
   defp handle_error(error) do
     [
-      ErrorUtils.internal_server_error("See details for more information", %{
+      ErrorUtils.internal_server_error("Internal server error", %{
         error: inspect(error)
       })
     ]
