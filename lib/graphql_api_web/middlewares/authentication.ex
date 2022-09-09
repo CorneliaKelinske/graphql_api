@@ -15,6 +15,13 @@ defmodule GraphqlApiWeb.Middlewares.Authentication do
     end
   end
 
+  if Mix.env() === :test do
+    # This matches on what is pushed in the subscription tests
+    def call(%{context: %{pubsub: GraphqlApiWeb.Endpoint}} = resolution, _) do
+      resolution
+    end
+  end
+
   def call(resolution, _) do
     Absinthe.Resolution.put_result(resolution, {:error, "Please enter a secret key"})
   end
