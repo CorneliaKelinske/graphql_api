@@ -34,4 +34,7 @@ defmodule GraphqlApi.Application do
     GraphqlApiWeb.Endpoint.config_change(changed, removed)
     :ok
   end
+
+  {:write_concurrency, reference} = :counters.new(8, [:write_concurrency])
+  :persistent_term.put(:hit_counter, reference)
 end
