@@ -7,6 +7,8 @@ defmodule GraphqlApi.Application do
 
   @impl true
   def start(_type, _args) do
+    GraphqlApi.HitCounter.setup_counter()
+
     children = [
       # Start the Ecto repository
       GraphqlApi.Repo,
@@ -16,9 +18,8 @@ defmodule GraphqlApi.Application do
       {Phoenix.PubSub, name: GraphqlApi.PubSub},
       # Start the Endpoint (http/https)
       GraphqlApiWeb.Endpoint,
-      {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]},
+      {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]}
       # Start the HitTracker for the Graphql Server
-      GraphqlApi.HitTracker
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
