@@ -20,7 +20,6 @@ defmodule GraphqlApi.Application do
       GraphqlApiWeb.Endpoint,
       {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]}
       # Start the HitTracker for the Graphql Server
-
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

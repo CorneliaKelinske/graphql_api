@@ -38,21 +38,20 @@ defmodule GraphqlApi.HitCounter do
     test_request: 9
   }
 
+  @spec setup_counter :: :ok
   def setup_counter do
     hit_counter = :counters.new(9, [:write_concurrency])
     :persistent_term.put(:hit_counter, hit_counter)
   end
 
+  @spec add_hit(request()) :: :ok
   def add_hit(request) when request in @request_types do
-    hit_counter = hit_counter()
-    index = Map.get(@indexes, request)
-    :counters.add(hit_counter, index, 1)
+    :counters.add(hit_counter(), index(request), 1)
   end
 
+  @spec get_hits(request()) :: integer()
   def get_hits(request) when request in @request_types do
-    hit_counter = hit_counter()
-    index = Map.get(@indexes, request)
-    :counters.get(hit_counter, index)
+    :counters.get(hit_counter(), index(request))
   end
 
   @spec request_types :: [request()]
@@ -60,5 +59,9 @@ defmodule GraphqlApi.HitCounter do
 
   defp hit_counter do
     :persistent_term.get(:hit_counter)
+  end
+
+  defp index(request) do
+    Map.get(@indexes, request)
   end
 end
