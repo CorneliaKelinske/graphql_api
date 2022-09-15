@@ -55,6 +55,7 @@ defmodule GraphqlApi.MixProject do
       {:absinthe_phoenix, "~> 2.0"},
       {:dataloader, "~> 1.0.0"},
       {:ecto_shorts, "~> 2.2.1"},
+      {:gen_stage, "~> 1.1.2"},
 
       # tooling
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},
