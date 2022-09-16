@@ -12,9 +12,8 @@ defmodule GraphqlApi.Pipeline.Producer do
   def handle_demand(demand, state) do
     events =
       Accounts.all_users(%{})
-      |> Enum.map()
+      |> Enum.map(& &1.id)
+
     {:noreply, events, state + demand}
   end
-
-
 end

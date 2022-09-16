@@ -18,8 +18,13 @@ defmodule GraphqlApi.Application do
       {Phoenix.PubSub, name: GraphqlApi.PubSub},
       # Start the Endpoint (http/https)
       GraphqlApiWeb.Endpoint,
-      {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]}
-      # Start the HitTracker for the Graphql Server
+      {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]},
+      {GraphqlApi.Pipeline.Producer, 0},
+      %{
+        id: 1,
+        start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
+      }
+      
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
