@@ -7,13 +7,24 @@ defmodule GraphqlApi.Pipeline.Producer do
     GenStage.start_link(__MODULE__, initial, name: __MODULE__)
   end
 
-  def init(counter), do: {:producer, counter}
+  def init(counter) do
+    Process.send_after(self(), :scrape, 1_000)
+    {:producer, counter}
+  end
 
   def handle_demand(demand, state) do
+    {:noreply, [], state + demand}
+  end
+
+  def handle_info(:scrape, state) do
     events =
       Accounts.all_users(%{})
       |> Enum.map(& &1.id)
 
-    {:noreply, events, state + demand}
+      Process.send_after(self(), :scrape, 10_000)
+
+    {:noreply, events, state}
   end
+
+
 end

@@ -23,8 +23,12 @@ defmodule GraphqlApi.Application do
       %{
         id: 1,
         start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
+      },
+      %{
+        id: 2,
+        start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
       }
-      
+
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
