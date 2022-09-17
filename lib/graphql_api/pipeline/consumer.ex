@@ -1,7 +1,7 @@
 defmodule GraphqlApi.Pipeline.Consumer do
   use GenStage
 
-  alias GraphqlApi.Pipeline.Helpers
+  alias GraphqlApi.{Pipeline.Helpers, TokenCache}
 
   def start_link(_opts) do
     GenStage.start_link(__MODULE__, :ok)
@@ -13,8 +13,8 @@ defmodule GraphqlApi.Pipeline.Consumer do
 
   def handle_events(events, _from, state) do
 
-    Enum.map(events, fn x -> %{x => Helpers.token_and_timestamp_map} end)
-    |> IO.inspect
+    Enum.each(events, & TokenCache.put(&1, Helpers.token_and_timestamp_map))
+    
 
 
     {:noreply, [], state}
