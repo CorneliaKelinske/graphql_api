@@ -27,7 +27,8 @@ defmodule GraphqlApi.Application do
       %{
         id: 2,
         start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
-      }
+      },
+      GraphqlApi.TokenCache
 
     ]
 

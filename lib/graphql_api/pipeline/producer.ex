@@ -8,7 +8,7 @@ defmodule GraphqlApi.Pipeline.Producer do
   end
 
   def init(counter) do
-    Process.send_after(self(), :scrape, 1_000)
+    Process.send(self(), :scrape, [])
     {:producer, counter}
   end
 
