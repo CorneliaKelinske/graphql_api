@@ -16,9 +16,12 @@ defmodule GraphqlApi.Pipeline.Consumer do
       events
       |> Enum.filter(&Helpers.update_needed?(&1))
       |> List.flatten()
+      |> dbg()
+
+
 
     if events !== [] do
-      Enum.each(events, &TokenCache.put(&1, Helpers.token_and_timestamp_map())) |> dbg()
+      Enum.each(events, &TokenCache.put(&1, Helpers.token_and_timestamp_map())) 
     end
 
     {:noreply, [], state}
