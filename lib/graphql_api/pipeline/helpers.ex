@@ -1,7 +1,6 @@
 defmodule GraphqlApi.Pipeline.Helpers do
   alias GraphqlApi.TokenCache
 
-
   @spec token_and_timestamp_map :: %{timestamp: DateTime.t(), token: binary}
   def token_and_timestamp_map do
     %{token: generate_token(), timestamp: DateTime.utc_now()}
@@ -9,18 +8,17 @@ defmodule GraphqlApi.Pipeline.Helpers do
 
   def update_needed?(id) do
     with %{timestamp: timestamp} <- TokenCache.get(id) do
-      check_expired(id, timestamp)
+      check_expired(timestamp)
     else
-      nil -> id
+      nil -> true
     end
   end
 
-
-  defp check_expired(id, timestamp) do
+  defp check_expired(timestamp) do
     if DateTime.diff(DateTime.utc_now(), timestamp, :hour) >= 24 do
-      id
+      true
     else
-      []
+      false
     end
   end
 

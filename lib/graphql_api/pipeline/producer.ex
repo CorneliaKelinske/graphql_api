@@ -21,10 +21,8 @@ defmodule GraphqlApi.Pipeline.Producer do
       Accounts.all_users(%{})
       |> Enum.map(& &1.id)
 
-      Process.send_after(self(), :scrape, 10_000)
+    Process.send_after(self(), :scrape, 10_000)
 
     {:noreply, events, state}
   end
-
-
 end

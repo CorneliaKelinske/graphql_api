@@ -29,7 +29,6 @@ defmodule GraphqlApi.Application do
         start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
       },
       GraphqlApi.TokenCache
-
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

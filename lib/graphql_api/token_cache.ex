@@ -8,7 +8,6 @@ defmodule GraphqlApi.TokenCache do
     :compressed,
     write_concurrency: true,
     read_concurrency: true
-
   ]
 
   def start_link(_opts \\ []) do
