@@ -23,6 +23,6 @@ defmodule GraphqlApi.Pipeline.Helpers do
   end
 
   defp generate_token() do
-    Base.encode32(:crypto.strong_rand_bytes(8), padding: false)
+    Base.encode32(:crypto.strong_rand_bytes(20), padding: false)
   end
 end

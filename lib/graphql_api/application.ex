@@ -19,24 +19,34 @@ defmodule GraphqlApi.Application do
       # Start the Endpoint (http/https)
       GraphqlApiWeb.Endpoint,
       {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]},
-      {GraphqlApi.Pipeline.Producer, 0},
-      %{
-        id: 1,
-        start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
-      },
-      %{
-        id: 2,
-        start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
-      },
       GraphqlApi.TokenCache
-    ]
+    ] ++ pipeline()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: GraphqlApi.Supervisor]
     Supervisor.start_link(children, opts)
+
   end
 
+
+  if Mix.env() === :test do
+    def pipeline, do: []
+  else
+    def pipeline do
+      [
+        {GraphqlApi.Pipeline.Producer, 0},
+        %{
+          id: 1,
+          start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
+        },
+        %{
+          id: 2,
+          start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
+        }
+      ]
+    end
+  end
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   @impl true

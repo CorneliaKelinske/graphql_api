@@ -12,11 +12,12 @@ defmodule GraphqlApi.TokenCache do
 
   def start_link(_opts \\ []) do
     Task.start_link(fn ->
-      :ets.new(@table_name, @ets_opts)
+      _ = :ets.new(@table_name, @ets_opts)
 
       Process.hibernate(Function, :identity, [])
     end)
   end
+
 
   def put(key, value) do
     :ets.insert(@table_name, {key, value})
