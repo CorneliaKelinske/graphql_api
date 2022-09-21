@@ -1,5 +1,5 @@
 defmodule GraphqlApi.Pipeline.Helpers do
-  alias GraphqlApi.{Config,TokenCache}
+  alias GraphqlApi.{Config, TokenCache}
 
   @token_max_age Config.token_max_age()
 

@@ -18,7 +18,6 @@ defmodule GraphqlApi.TokenCache do
     end)
   end
 
-
   def put(key, value) do
     :ets.insert(@table_name, {key, value})
   end

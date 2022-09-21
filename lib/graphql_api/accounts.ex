@@ -9,7 +9,7 @@ defmodule GraphqlApi.Accounts do
   @type error :: ErrorMessage.t()
   @preference_params Preference.required_params()
 
-  @spec all_users(map) :: [User.t()]
+  @spec all_users(map, pid()) :: [User.t()]
   def all_users(params, caller \\ self()) do
     user_params = Map.drop(params, @preference_params)
 

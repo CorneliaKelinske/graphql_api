@@ -22,8 +22,7 @@ defmodule GraphqlApi.Pipeline.Consumer do
       Enum.each(events, &TokenCache.put(&1, Helpers.token_and_timestamp_map()))
     end
 
-Helpers.maybe_send_sync(caller)
-
+    Helpers.maybe_send_sync(caller)
     {:noreply, [], caller}
   end
 end
