@@ -9,4 +9,9 @@ defmodule GraphqlApi.Config do
   def secret_key do
     Application.fetch_env!(@app, :secret_key)
   end
+
+  @spec token_max_age :: %{unit: :atom, amount: pos_integer()}
+  def token_max_age do
+    Application.fetch_env!(@app, :token_max_age)
+  end
 end
