@@ -10,7 +10,7 @@ defmodule GraphqlApi.Accounts do
   @preference_params Preference.required_params()
 
   @spec all_users(map) :: [User.t()]
-  def all_users(params) do
+  def all_users(params, caller \\ self()) do
     user_params = Map.drop(params, @preference_params)
 
     params
@@ -18,7 +18,7 @@ defmodule GraphqlApi.Accounts do
     |> Enum.reduce(User.join_preferences(), fn
       filter, acc -> User.by_preferences(acc, filter)
     end)
-    |> Actions.all(user_params)
+    |> Actions.all(user_params, caller: caller)
   end
 
   @spec find_user(map) :: {:ok, User.t()} | {:error, error()}

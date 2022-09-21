@@ -3,15 +3,15 @@ defmodule GraphqlApi.Pipeline.Consumer do
 
   alias GraphqlApi.{Pipeline.Helpers, TokenCache}
 
-  def start_link(_opts) do
-    GenStage.start_link(__MODULE__, :ok)
+  def start_link(caller) when is_pid(caller) do
+    GenStage.start_link(__MODULE__, caller)
   end
 
-  def init(state) do
-    {:consumer, state, subscribe_to: [GraphqlApi.Pipeline.Producer]}
+  def init(caller) when is_pid(caller) do
+    {:consumer, caller, subscribe_to: [GraphqlApi.Pipeline.Producer]}
   end
 
-  def handle_events(events, _from, state) do
+  def handle_events(events, _from, caller) do
     events =
       events
       |> Enum.filter(&Helpers.update_needed?(&1))
@@ -22,6 +22,8 @@ defmodule GraphqlApi.Pipeline.Consumer do
       Enum.each(events, &TokenCache.put(&1, Helpers.token_and_timestamp_map()))
     end
 
-    {:noreply, [], state}
+Helpers.maybe_send_sync(caller)
+
+    {:noreply, [], caller}
   end
 end
