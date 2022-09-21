@@ -9,44 +9,44 @@ defmodule GraphqlApi.Application do
   def start(_type, _args) do
     GraphqlApi.HitCounter.setup_counter()
 
-    children = [
-      # Start the Ecto repository
-      GraphqlApi.Repo,
-      # Start the Telemetry supervisor
-      GraphqlApiWeb.Telemetry,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: GraphqlApi.PubSub},
-      # Start the Endpoint (http/https)
-      GraphqlApiWeb.Endpoint,
-      {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]},
-      GraphqlApi.TokenCache
-    ] ++ pipeline()
+    children =
+      [
+        # Start the Ecto repository
+        GraphqlApi.Repo,
+        # Start the Telemetry supervisor
+        GraphqlApiWeb.Telemetry,
+        # Start the PubSub system
+        {Phoenix.PubSub, name: GraphqlApi.PubSub},
+        # Start the Endpoint (http/https)
+        GraphqlApiWeb.Endpoint,
+        {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]},
+        GraphqlApi.TokenCache
+      ] ++ pipeline()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: GraphqlApi.Supervisor]
     Supervisor.start_link(children, opts)
-
   end
-
 
   if Mix.env() === :test do
     def pipeline, do: []
   else
     def pipeline do
       [
-        {GraphqlApi.Pipeline.Producer, 0},
+        {GraphqlApi.Pipeline.Producer, self()},
         %{
           id: 1,
-          start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
+          start: {GraphqlApi.Pipeline.Consumer, :start_link, [self()]}
         },
         %{
           id: 2,
-          start: {GraphqlApi.Pipeline.Consumer, :start_link, [[]]}
+          start: {GraphqlApi.Pipeline.Consumer, :start_link, [self()]}
         }
       ]
     end
   end
+
   # Tell Phoenix to update the endpoint configuration
   # whenever the application is updated.
   @impl true

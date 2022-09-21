@@ -6,6 +6,7 @@ defmodule GraphqlApi.AccountsFixtures do
   alias GraphqlApi.Accounts
 
   @valid_user_params %{name: "Harry", email: "email@example.com"}
+
   @valid_preference_params %{likes_emails: false, likes_phone_calls: false, likes_faxes: false}
 
   def user(_context) do

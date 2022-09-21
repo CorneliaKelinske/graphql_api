@@ -8,10 +8,10 @@
 import Config
 
 config :graphql_api,
-  ecto_repos: [GraphqlApi.Repo]
-
-config :graphql_api,
-  secret_key: "TwoCanKeepASecretIfOneOfThemIsDead"
+  ecto_repos: [GraphqlApi.Repo],
+  secret_key: "TwoCanKeepASecretIfOneOfThemIsDead",
+  token_max_age: %{unit: :hour, amount: 24},
+  producer_sleep_time: 10_000
 
 config :ecto_shorts,
   repo: GraphqlApi.Repo,
