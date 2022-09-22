@@ -35,14 +35,7 @@ defmodule GraphqlApi.Application do
     def pipeline do
       [
         {GraphqlApi.Pipeline.Producer, self()},
-        %{
-          id: 1,
-          start: {GraphqlApi.Pipeline.Consumer, :start_link, [self()]}
-        },
-        %{
-          id: 2,
-          start: {GraphqlApi.Pipeline.Consumer, :start_link, [self()]}
-        }
+        {GraphqlApi.Pipeline.ConsumerSupervisor, self()}
       ]
     end
   end

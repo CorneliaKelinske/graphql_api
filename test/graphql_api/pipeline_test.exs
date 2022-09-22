@@ -33,6 +33,6 @@ defmodule GraphqlApi.PipelineTest do
 
   defp start_pipeline() do
     start_supervised!({GraphqlApi.Pipeline.Producer, self()})
-    start_supervised!(%{id: 1, start: {GraphqlApi.Pipeline.Consumer, :start_link, [self()]}})
+    start_supervised!({GraphqlApi.Pipeline.ConsumerSupervisor, self()})
   end
 end
