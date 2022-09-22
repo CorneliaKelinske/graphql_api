@@ -15,7 +15,8 @@ defmodule GraphqlApi.PipelineTest do
       TokenCache.put(user.id, %{token: "FakeToken", timestamp: @expired})
       assert %{token: "FakeToken", timestamp: @expired} === TokenCache.get(user.id)
       start_pipeline()
-      assert_receive(:sync, 500)
+      #assert_receive(:sync, 50)
+      Process.sleep(500)
       assert %{token: _token, timestamp: timestamp} = TokenCache.get(user.id)
       assert timestamp !== @expired
     end
@@ -25,7 +26,8 @@ defmodule GraphqlApi.PipelineTest do
       TokenCache.put(user.id, %{token: "FakeToken", timestamp: @non_expired})
       assert %{token: "FakeToken", timestamp: @non_expired} === TokenCache.get(user.id)
       start_pipeline()
-      assert_receive(:sync, 500)
+      #assert_receive(:sync, 500)
+      Process.sleep(500)
       assert %{token: _token, timestamp: timestamp} = TokenCache.get(user.id)
       assert timestamp === @non_expired
     end
@@ -33,6 +35,6 @@ defmodule GraphqlApi.PipelineTest do
 
   defp start_pipeline() do
     start_supervised!({GraphqlApi.Pipeline.Producer, self()})
-    start_supervised!(%{id: 1, start: {GraphqlApi.Pipeline.Consumer, :start_link, [self()]}})
+    start_supervised!( GraphqlApi.Pipeline.ConsumerSupervisor)
   end
 end
