@@ -1,17 +1,19 @@
 defmodule GraphqlApi.Pipeline.ConsumerSupervisor do
+  @moduledoc false
   use ConsumerSupervisor
 
-
+  @spec start_link(pid) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(caller) when is_pid(caller) do
     ConsumerSupervisor.start_link(__MODULE__, caller)
   end
 
+  @impl ConsumerSupervisor
   def init(caller) when is_pid(caller) do
     children = [
       %{
-      id: GraphqlApi.Pipeline.Consumer,
-          start: {GraphqlApi.Pipeline.Consumer, :start_link, [caller]},
-          restart: :transient
+        id: GraphqlApi.Pipeline.Consumer,
+        start: {GraphqlApi.Pipeline.Consumer, :start_link, [caller]},
+        restart: :transient
       }
     ]
 
@@ -24,5 +26,4 @@ defmodule GraphqlApi.Pipeline.ConsumerSupervisor do
 
     ConsumerSupervisor.init(children, opts)
   end
-
 end

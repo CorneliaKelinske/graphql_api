@@ -21,7 +21,6 @@ defmodule GraphqlApi.PipelineTest do
     end
 
     test "does not update non-expired user token", %{user: user} do
-
       TokenCache.put(user.id, %{token: "FakeToken", timestamp: @non_expired})
       assert %{token: "FakeToken", timestamp: @non_expired} === TokenCache.get(user.id)
       start_pipeline()
@@ -31,7 +30,7 @@ defmodule GraphqlApi.PipelineTest do
     end
   end
 
-  defp start_pipeline() do
+  defp start_pipeline do
     start_supervised!({GraphqlApi.Pipeline.Producer, self()})
     start_supervised!({GraphqlApi.Pipeline.ConsumerSupervisor, self()})
   end

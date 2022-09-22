@@ -23,10 +23,8 @@ config :graphql_api, GraphqlApiWeb.Endpoint,
 # Print only warnings and errors during test
 config :logger, level: :warn
 
-
 config :graphql_api,
-producer_sleep_time: 10
-
+  producer_sleep_time: 10
 
 # Initialize plugs at runtime for faster test compilation
 config :phoenix, :plug_init_mode, :runtime

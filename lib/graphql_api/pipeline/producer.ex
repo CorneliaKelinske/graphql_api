@@ -11,15 +11,18 @@ defmodule GraphqlApi.Pipeline.Producer do
 
   @sleep Config.producer_sleep_time()
 
+  @spec start_link(pid) :: :ignore | {:error, any} | {:ok, pid}
   def start_link(caller) when is_pid(caller) do
     GenStage.start_link(__MODULE__, caller, name: __MODULE__)
   end
 
+  @impl GenStage
   def init(caller) when is_pid(caller) do
     Process.send(self(), :scrape, [])
     {:producer, %{demand: 0, events: [], caller: caller}}
   end
 
+  @impl GenStage
   def handle_demand(new_demand, %{demand: demand, events: events, caller: caller}) do
     demand = demand + new_demand
     {outgoing_events, state} = update_state(demand, events, caller)
@@ -27,6 +30,7 @@ defmodule GraphqlApi.Pipeline.Producer do
     {:noreply, outgoing_events, state}
   end
 
+  @impl GenStage
   def handle_info(:scrape, %{demand: demand, events: [], caller: caller}) do
     events =
       Accounts.all_users(%{}, caller)
@@ -39,6 +43,7 @@ defmodule GraphqlApi.Pipeline.Producer do
     {:noreply, outgoing_events, state}
   end
 
+  @impl GenStage
   def handle_info(:scrape, %{demand: demand, events: events, caller: caller}) do
     {outgoing_events, state} = update_state(demand, events, caller)
 
