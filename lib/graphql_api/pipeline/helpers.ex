@@ -29,7 +29,7 @@ defmodule GraphqlApi.Pipeline.Helpers do
   if Mix.env() === :test do
     def maybe_send_sync(pid), do: send(pid, :sync)
   else
-    def maybe_send_sync(_pid), do: :sync |> dbg()
+    def maybe_send_sync(_pid), do: :sync 
   end
 
   defp check_expired(timestamp) do

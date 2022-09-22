@@ -1,6 +1,6 @@
 defmodule GraphqlApiWeb.Resolvers.User do
   @moduledoc false
-  alias GraphqlApi.{Accounts, Accounts.User, HitCounter}
+  alias GraphqlApi.{Accounts, Accounts.User, HitCounter, TokenCache}
 
   @type resolution :: Absinthe.Resolution.t()
   @type error :: GraphqlApi.Accounts.error()
@@ -32,5 +32,12 @@ defmodule GraphqlApiWeb.Resolvers.User do
     id
     |> String.to_integer()
     |> Accounts.update_user(Map.delete(params, :id))
+  end
+
+  def get_user_token(%{id: id}, _) do
+    case TokenCache.get(id) do
+      %{token: token} -> {:ok, token}
+      _ -> nil
+    end
   end
 end
