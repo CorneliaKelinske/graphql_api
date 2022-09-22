@@ -35,7 +35,7 @@ defmodule GraphqlApi.Application do
     def pipeline do
       [
         {GraphqlApi.Pipeline.Producer, self()},
-        GraphqlApi.Pipeline.ConsumerSupervisor
+        {GraphqlApi.Pipeline.ConsumerSupervisor, self()}
       ]
     end
   end

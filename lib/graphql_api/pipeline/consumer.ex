@@ -3,9 +3,9 @@ defmodule GraphqlApi.Pipeline.Consumer do
 
   alias GraphqlApi.{Pipeline.Helpers, TokenCache}
 
-  def start_link(event) do
+  def start_link(caller, event) do
     Task.start_link(fn ->
-      handle_event(self(), event)
+      handle_event(caller, event)
     end)
   end
 
@@ -18,7 +18,7 @@ defmodule GraphqlApi.Pipeline.Consumer do
 
 
    Helpers.maybe_send_sync(caller)
- 
+
 
   end
 end
