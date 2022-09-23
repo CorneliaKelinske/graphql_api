@@ -10,8 +10,9 @@ defmodule GraphqlApiWeb.Types.User do
     field :id, non_null(:id)
     field :name, non_null(:string)
     field :email, non_null(:string)
+
     field :auth_token, :string do
-      resolve fn user, _, _ ->  get_auth_token(user) end
+      resolve fn user, _, _ -> get_auth_token(user) end
     end
 
     field :preferences, non_null(:preferences),

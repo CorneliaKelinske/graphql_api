@@ -1,7 +1,7 @@
 defmodule GraphqlApi.PipelineTest do
   use GraphqlApi.DataCase, async: true
 
-  import GraphqlApi.AccountsFixtures, only: [user: 1]
+  import GraphqlApi.UserFixtures, only: [user: 1]
 
   alias GraphqlApi.TokenCache
 

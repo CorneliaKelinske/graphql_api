@@ -1,6 +1,6 @@
 defmodule GraphqlApiWeb.Schema.Subscriptions.PreferenceTest do
   use GraphqlApiWeb.SubscriptionCase
-  import GraphqlApi.AccountsFixtures, only: [user: 1]
+  import GraphqlApi.UserFixtures, only: [user: 1]
 
   alias GraphqlApi.Config
 

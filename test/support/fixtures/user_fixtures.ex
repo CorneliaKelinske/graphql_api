@@ -1,9 +1,9 @@
-defmodule GraphqlApi.AccountsFixtures do
+defmodule GraphqlApi.UserFixtures do
   @moduledoc """
   This module defines test helpers for creating
   entities via the `GraphqlApi.Accounts` context.
   """
-  alias GraphqlApi.Accounts
+  alias GraphqlApi.{Accounts, TokenCache}
 
   @valid_user_params %{name: "Harry", email: "email@example.com"}
 
@@ -16,5 +16,10 @@ defmodule GraphqlApi.AccountsFixtures do
       |> Accounts.create_user()
 
     %{user: user}
+  end
+
+  def cache_entry(%{user: %{id: id}}) do
+    cache_entry = TokenCache.put(id, %{token: "FakeToken", timestamp: DateTime.utc_now()})
+    %{cache_entry: cache_entry}
   end
 end
