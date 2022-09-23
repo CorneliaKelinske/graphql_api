@@ -1,7 +1,7 @@
 defmodule GraphqlApiWeb.Schema.Queries.PreferenceTest do
   use GraphqlApi.DataCase
 
-  import GraphqlApi.AccountsFixtures, only: [user: 1]
+  import GraphqlApi.UserFixtures, only: [user: 1]
   alias GraphqlApi.Accounts
   alias GraphqlApiWeb.Schema
 
