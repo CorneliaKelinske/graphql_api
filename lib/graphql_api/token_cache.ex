@@ -22,9 +22,15 @@ defmodule GraphqlApi.TokenCache do
     end)
   end
 
-  @spec put(non_neg_integer(), token_cache_value()) :: true
+  @spec put(non_neg_integer(), token_cache_value()) :: :ok
   def put(key, value) do
     :ets.insert(@table_name, {key, value})
+
+    Absinthe.Subscription.publish(GraphqlApiWeb.Endpoint, %{string: value.token},
+      auth_token_generated: "user_auth_token_generated:#{key}"
+    )
+
+    # |> dbg()
   end
 
   @spec get(non_neg_integer()) :: token_cache_value() | nil
