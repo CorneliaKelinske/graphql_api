@@ -4,6 +4,7 @@ defmodule GraphqlApiWeb.Schema do
   alias GraphqlApiWeb.Middlewares.{Authentication, HandleErrors}
 
   import_types GraphqlApiWeb.Types.AuthToken
+  import_types GraphqlApiWeb.Types.Custom
   import_types GraphqlApiWeb.Types.Preference
   import_types GraphqlApiWeb.Types.User
   import_types GraphqlApiWeb.Types.Request
