@@ -47,7 +47,7 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
                        "email" => ^email,
                        "auth_token" => %{
                          "user_id" => ^user_id,
-                         "token"  => @auth_token
+                         "token" => @auth_token
                        },
                        "preferences" => %{
                          "likes_emails" => false,
@@ -144,9 +144,9 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
                      "name" => ^name,
                      "email" => ^email,
                      "auth_token" => %{
-                      "user_id" => ^user_id,
-                      "token"  => @auth_token
-                    },
+                       "user_id" => ^user_id,
+                       "token" => @auth_token
+                     },
                      "preferences" => %{
                        "likes_emails" => false,
                        "likes_faxes" => false,
@@ -171,9 +171,9 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
                      "name" => ^name,
                      "email" => ^email,
                      "auth_token" => %{
-                      "user_id" => ^user_id,
-                      "token"  => @auth_token
-                    },
+                       "user_id" => ^user_id,
+                       "token" => @auth_token
+                     },
                      "preferences" => %{
                        "user_id" => ^user_id,
                        "likes_emails" => false,

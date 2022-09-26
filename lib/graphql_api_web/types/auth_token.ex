@@ -1,4 +1,5 @@
 defmodule GraphqlApiWeb.Types.AuthToken do
+  @moduledoc false
   use Absinthe.Schema.Notation
 
   @desc "An auth token for a user"

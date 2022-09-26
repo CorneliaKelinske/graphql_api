@@ -11,7 +11,7 @@ defmodule GraphqlApi.TokenCache do
     read_concurrency: true
   ]
 
-  @type token_cache_value :: %{timestamp: DateTime.t(), token: binary}
+  @type token_cache_value :: %{timestamp: DateTime.t(), token: String.t()}
 
   @spec start_link(any) :: {:ok, pid}
   def start_link(_opts \\ []) do
