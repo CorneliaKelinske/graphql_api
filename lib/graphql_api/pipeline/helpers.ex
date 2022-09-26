@@ -15,11 +15,11 @@ defmodule GraphqlApi.Pipeline.Helpers do
   def update_needed?(id) do
     case TokenCache.get(id) do
       %{timestamp: timestamp} -> check_expired(timestamp)
-      _ -> true
+      nil -> true
     end
   end
 
-  @spec maybe_send_sync(pid) :: atom()
+  @spec maybe_send_sync(pid) :: :sync
   @doc """
   Provides a synchronization point for testing GenServers.
   Sends a message in test and noops in other environments

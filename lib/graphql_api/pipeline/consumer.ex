@@ -6,15 +6,15 @@ defmodule GraphqlApi.Pipeline.Consumer do
   alias GraphqlApi.{Pipeline.Helpers, TokenCache}
 
   @spec start_link(pid, non_neg_integer()) :: {:ok, pid}
-  def start_link(caller, event) do
+  def start_link(caller, user_id) do
     Task.start_link(fn ->
-      handle_event(caller, event)
+      handle_event(caller, user_id)
     end)
   end
 
-  defp handle_event(caller, event) do
-    if Helpers.update_needed?(event) === true do
-      TokenCache.put(event, Helpers.token_and_timestamp_map())
+  defp handle_event(caller, user_id) do
+    if Helpers.update_needed?(user_id) === true do
+      TokenCache.put(user_id, Helpers.token_and_timestamp_map())
     end
 
     Helpers.maybe_send_sync(caller)
