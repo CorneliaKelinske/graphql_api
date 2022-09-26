@@ -26,11 +26,11 @@ defmodule GraphqlApi.TokenCache do
   def put(key, value) do
     :ets.insert(@table_name, {key, value})
 
-    Absinthe.Subscription.publish(GraphqlApiWeb.Endpoint, %{string: value.token},
+    auth_token = Map.merge(value, %{user_id: key})
+
+    Absinthe.Subscription.publish(GraphqlApiWeb.Endpoint, auth_token,
       auth_token_generated: "user_auth_token_generated:#{key}"
     )
-
-    # |> dbg()
   end
 
   @spec get(non_neg_integer()) :: token_cache_value() | nil
