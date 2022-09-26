@@ -13,10 +13,14 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
   @all_users_doc """
   query Users($likesEmails: Boolean, $likesPhoneCalls: Boolean, $likesFaxes: Boolean, $name: String, $before: Int, $after: Int, $first: Int ) {
     users (likesEmails: $likesEmails, likesPhoneCalls: $likesPhoneCalls, likesFaxes: $likesFaxes, name: $name, before: $before, after: $after, first: $first) {
-     id
-     name
-     email
-     auth_token
+      id
+      name
+      email
+      auth_token {
+        user_id
+        token
+        timestamp
+      }
       preferences {
         id
         user_id
@@ -41,7 +45,10 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
                        "id" => ^user_id,
                        "name" => ^name,
                        "email" => ^email,
-                       "auth_token" => @auth_token,
+                       "auth_token" => %{
+                         "user_id" => ^user_id,
+                         "token" => @auth_token
+                       },
                        "preferences" => %{
                          "likes_emails" => false,
                          "likes_faxes" => false,
@@ -108,14 +115,18 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
      id
      name
      email
-     auth_token
-      preferences {
-        id
-        user_id
-        likes_emails
-        likes_phone_calls
-        likes_faxes
-      }
+     auth_token {
+      user_id
+      token
+      timestamp
+     }
+    preferences {
+      id
+      user_id
+      likes_emails
+      likes_phone_calls
+      likes_faxes
+     }
     }
   }
   """
@@ -132,7 +143,10 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
                      "id" => ^user_id,
                      "name" => ^name,
                      "email" => ^email,
-                     "auth_token" => @auth_token,
+                     "auth_token" => %{
+                       "user_id" => ^user_id,
+                       "token" => @auth_token
+                     },
                      "preferences" => %{
                        "likes_emails" => false,
                        "likes_faxes" => false,
@@ -156,7 +170,10 @@ defmodule GraphqlApiWeb.Schema.Queries.UserTest do
                      "id" => ^user_id,
                      "name" => ^name,
                      "email" => ^email,
-                     "auth_token" => @auth_token,
+                     "auth_token" => %{
+                       "user_id" => ^user_id,
+                       "token" => @auth_token
+                     },
                      "preferences" => %{
                        "user_id" => ^user_id,
                        "likes_emails" => false,
