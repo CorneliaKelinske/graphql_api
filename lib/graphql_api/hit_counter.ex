@@ -26,21 +26,21 @@ defmodule GraphqlApi.HitCounter do
     :test_request
   ]
 
-  @indexes %{
-    preferences: 1,
-    update_user_preferences: 2,
-    user_preferences: 3,
-    resolver_hits: 4,
-    users: 5,
-    user: 6,
-    create_user: 7,
-    update_user: 8,
-    test_request: 9
-  }
+  @indexes [
+    :preferences,
+    :update_user_preferences,
+    :user_preferences,
+    :resolver_hits,
+    :users,
+    :user,
+    :create_user,
+    :update_user,
+    :test_request
+  ]
 
   @spec setup_counter :: :ok
   def setup_counter do
-    hit_counter = :counters.new(9, [:write_concurrency])
+    hit_counter = :counters.new(Enum.count(@indexes), [:write_concurrency])
     :persistent_term.put(:hit_counter, hit_counter)
   end
 
@@ -51,6 +51,15 @@ defmodule GraphqlApi.HitCounter do
 
   @spec get_hits(request()) :: integer()
   def get_hits(request) when request in @request_types do
+    nodes = [node() | Node.list()]
+
+    Enum.reduce(nodes, 0, fn x, acc ->
+      acc + :erpc.call(x, __MODULE__, :get_cluster_hits, [request])
+    end)
+  end
+
+  @spec get_cluster_hits(request()) :: integer
+  def get_cluster_hits(request) do
     :counters.get(hit_counter(), index(request))
   end
 
@@ -62,6 +71,6 @@ defmodule GraphqlApi.HitCounter do
   end
 
   defp index(request) do
-    Map.get(@indexes, request)
+    Enum.find_index(@indexes, &(&1 === request)) + 1
   end
 end
