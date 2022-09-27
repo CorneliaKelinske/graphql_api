@@ -7,10 +7,17 @@ defmodule GraphqlApi.Application do
 
   @impl true
   def start(_type, _args) do
+    topologies = [
+      example: [
+        strategy: Cluster.Strategy.Epmd,
+        config: [hosts: [:node_a@localhost, :node_b@localhost]]
+      ]
+    ]
     GraphqlApi.HitCounter.setup_counter()
 
     children =
       [
+        {Cluster.Supervisor, [topologies, [name: GraphqlApi.ClusterSupervisor]]},
         # Start the Ecto repository
         GraphqlApi.Repo,
         # Start the Telemetry supervisor
