@@ -13,6 +13,7 @@ defmodule GraphqlApi.Application do
         config: [hosts: [:node_a@localhost, :node_b@localhost]]
       ]
     ]
+
     GraphqlApi.HitCounter.setup_counter()
 
     children =

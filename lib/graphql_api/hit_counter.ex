@@ -26,7 +26,8 @@ defmodule GraphqlApi.HitCounter do
     :test_request
   ]
 
-  @indexes    [:preferences,
+  @indexes [
+    :preferences,
     :update_user_preferences,
     :user_preferences,
     :resolver_hits,
@@ -34,8 +35,8 @@ defmodule GraphqlApi.HitCounter do
     :user,
     :create_user,
     :update_user,
-    :test_request]
-
+    :test_request
+  ]
 
   @spec setup_counter :: :ok
   def setup_counter do
@@ -50,7 +51,15 @@ defmodule GraphqlApi.HitCounter do
 
   @spec get_hits(request()) :: integer()
   def get_hits(request) when request in @request_types do
+    nodes = [node() | Node.list()]
 
+    Enum.reduce(nodes, 0, fn x, acc ->
+      acc + :erpc.call(x, __MODULE__, :get_cluster_hits, [request])
+    end)
+  end
+
+  @spec get_cluster_hits(request()) :: integer
+  def get_cluster_hits(request) do
     :counters.get(hit_counter(), index(request))
   end
 
@@ -62,6 +71,6 @@ defmodule GraphqlApi.HitCounter do
   end
 
   defp index(request) do
-    Enum.find_index(@indexes, & &1 === request) + 1
+    Enum.find_index(@indexes, &(&1 === request)) + 1
   end
 end
