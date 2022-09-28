@@ -8,6 +8,7 @@ defmodule GraphqlApiWeb.Resolvers.AuthToken do
   @spec get_auth_token(%{:user_id => String.t()}, resolution()) :: {:ok, nil | auth_token()}
   def get_auth_token(%{user_id: user_id}, _) do
     HitCounter.add_hit(:auth_token)
+
     user_id
     |> String.to_integer()
     |> retrieve_token_from_cache()
