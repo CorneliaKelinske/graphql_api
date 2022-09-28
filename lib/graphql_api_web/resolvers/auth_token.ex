@@ -1,12 +1,14 @@
 defmodule GraphqlApiWeb.Resolvers.AuthToken do
   @moduledoc false
 
-  alias GraphqlApi.TokenCache
+  alias GraphqlApi.{HitCounter, TokenCache}
   @type resolution :: Absinthe.Resolution.t()
   @type auth_token :: %{timestamp: DateTime.t(), token: String.t(), user_id: non_neg_integer()}
 
   @spec get_auth_token(%{:user_id => String.t()}, resolution()) :: {:ok, nil | auth_token()}
   def get_auth_token(%{user_id: user_id}, _) do
+    HitCounter.add_hit(:auth_token)
+
     user_id
     |> String.to_integer()
     |> retrieve_token_from_cache()
