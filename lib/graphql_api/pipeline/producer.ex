@@ -33,7 +33,8 @@ defmodule GraphqlApi.Pipeline.Producer do
   @impl GenStage
   def handle_info(:scrape, %{demand: demand, events: [], caller: caller}) do
     events =
-      Accounts.all_users(%{}, caller)
+      %{}
+      |> Accounts.all_users(caller)
       |> Enum.map(& &1.id)
 
     {outgoing_events, state} = update_state(demand, events, caller)
