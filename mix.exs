@@ -44,6 +44,7 @@ defmodule GraphqlApi.MixProject do
       {:ecto_sql, "~> 3.6"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_live_dashboard, "~> 0.6"},
+      {:telemetry, "~> 1.2.1"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.18"},
@@ -56,6 +57,8 @@ defmodule GraphqlApi.MixProject do
       {:ecto_shorts, "~> 2.2.3"},
       {:gen_stage, "~> 1.1.2"},
       {:libcluster, "~> 3.3.1"},
+      {:statix, "~> 1.4.0"},
+      {:telemetry_metrics_statsd, "~> 0.3.0"},
 
       # tooling
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},

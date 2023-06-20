@@ -7,6 +7,17 @@ defmodule GraphqlApi.Application do
 
   @impl true
   def start(_type, _args) do
+    :ok = GraphqlApi.Telemetry.StatsdReporter.connect()
+
+    :ok =
+      :telemetry.attach(
+        # unique handler id
+        "graphqlapi-telemetry-metrics",
+        [:accounts, :query],
+        &GraphqlApi.Telemetry.Metrics.handle_event/4,
+        nil
+      )
+
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,
@@ -28,7 +39,8 @@ defmodule GraphqlApi.Application do
         # Start the Endpoint (http/https)
         GraphqlApiWeb.Endpoint,
         {Absinthe.Subscription, [GraphqlApiWeb.Endpoint]},
-        GraphqlApi.TokenCache
+        GraphqlApi.TokenCache,
+        GraphqlApi.Telemetry
       ] ++ pipeline()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
